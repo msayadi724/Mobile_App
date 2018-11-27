@@ -1,0 +1,63 @@
+<div *ngIf="showSplash" class="splash">
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+    </div>
+  </div>
+
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar color="medcolor">
+      <ion-title style="margin-left: 6%;">TRUSH MANAGER APP</ion-title>
+      <div *ngIf="user"><h1 style="margin-top:2.5% !important; font-weight:bold; font-size:1.8em; color: brown; margin-left: 10%;">Welcome {{user.username}}</h1></div>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+     
+
+    <ion-list *ngIf="user">
+      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" style=" background-color: beige; border-bottom-color: black ;" large>
+        <h2 style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;">
+        {{p.title}}
+      </h2>
+      </button>
+      <button menuClose ion-item *ngIf="user"  (click)="triggerLoggedOff()" style=" background-color: beige; border-bottom-color: black ;" large>
+          <h6 style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;">
+              <ion-icon name="log-out" style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;"></ion-icon>
+        Log out
+      </h6>
+      </button>
+
+    </ion-list>
+    <button menuClose ion-item *ngIf="!user"  (click)="openPage(pageLogin)" style=" background-color: beige; border-bottom-color: black ;" large>
+      <h3 style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;">
+          <ion-icon name="log-in" style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;"></ion-icon>
+      Signin
+      </h3>
+    </button>
+    <button menuClose ion-item *ngIf="!user"  (click)="openPage(pageSignup)" style=" background-color: beige; border-bottom-color: black ;" large>
+      <h4 style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;">
+          <ion-icon name="contact" style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;"></ion-icon>
+      Signup
+      </h4>
+    </button>
+
+    <button menuClose ion-item *ngIf="!user"  (click)="openPage(pageSplash)" style=" background-color: beige; border-bottom-color: black ;" large>
+      
+      <h5 style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;">
+          <ion-icon name="home" style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;"></ion-icon>
+      Home
+    </h5>
+    </button>
+      
+
+  </ion-content>
+
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

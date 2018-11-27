@@ -1,0 +1,89 @@
+page-splash {
+
+  .no-scroll .scroll-content{
+      overflow: hidden;
+    }
+
+
+
+  .diag {
+
+    position: absolute;
+    z-index: 1;
+    width:100%;
+    top: 0%;
+    height:100%;
+  }
+
+
+
+  .diag2 {
+
+    position: absolute;
+    z-index: 1;
+    width:100%;
+    top:0%;
+    height:100%;
+  }
+  .buttons{
+
+margin-top: 70%;
+
+
+  }
+  ion-icon {
+      margin-top: 40%;
+      font-size:7em;
+  }
+
+  h2 {
+      margin-top:0% !important;
+      font-weight:bold;
+      font-size:3em;
+  }
+  h1 {
+    margin-top:11.5% !important;
+    font-weight:bold;
+    font-size:1.8em;
+}
+
+  h3 {
+      margin-top:50% !important;
+      font-weight:bold;
+      font-size:1.3em;
+  }
+
+
+  p {
+      width:80%!important;
+      display:block;
+      margin: 0 auto;
+      font-size:.9em;
+  }
+
+  .swiper-pagination-bullet-active {
+      background:#29aae3;
+  }
+
+  .swiper-pagination {
+      bottom: 3% !important;
+  }
+
+  #skip {
+      position:absolute;
+      bottom: 5%;
+
+      background:none !important;
+      right: 5%;
+      cursor:pointer;
+      z-index:5;
+        font-size:1.1em;
+  }
+
+  // #register {
+  //     //cursor:pointer;
+  //     z-index:5;
+  // }
+
+ 
+  }

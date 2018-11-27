@@ -1,0 +1,75 @@
+<!--
+  Generated template for the SplashPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+
+
+
+<ion-header class="header">
+    <ion-navbar color="medcolor">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+     <h1>Overview Page</h1>
+    </ion-navbar>
+</ion-header>
+
+
+
+
+<ion-content #popoverContent padding class="no-scroll" >
+
+  <ion-slides pager>
+
+    <ion-slide style=" background-color: beige;" >
+      
+     <div >
+       <h2  >WELCOME TO RUBBISH MANAGER APP! </h2>
+     </div>
+    </ion-slide>
+
+    
+
+      
+          
+       <ion-slide style=" background-color: beige;">
+      <div class="diag" >
+         <img style="widows: 650px; height:400px;" src="assets/imgs/smart-waste-management.png" >
+     </div>
+     
+
+    </ion-slide>
+    
+    <ion-slide style=" background-color: beige;">
+
+        <div class="diag" >
+           <img  src="assets/imgs/smart-waste-management.png" >
+       </div>
+
+       <div>
+          <h3 >DESCRIPTION ! </h3>
+          <p>RUBBISH MANAGER APP is a mobile app that provides estimated dates for collection of waste,
+                         real time bin status, expected fill up dates for the bins,
+                             and optimized shortest path for waste collection. 
+                   The system will summarize the collected information and generate reports.
+          </p>
+        </div>
+   </ion-slide>
+
+
+
+  </ion-slides>
+
+ <button (click)="skip()" id="skip">            Continuer > </button>
+
+</ion-content>
+<ion-footer >
+    <ion-toolbar color="medcolor" >
+        
+        
+    
+    </ion-toolbar>
+</ion-footer>

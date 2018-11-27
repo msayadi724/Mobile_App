@@ -1,0 +1,49 @@
+<ion-header>
+    <ion-navbar color="medcolor">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+     <h1>Stat Page</h1>
+    </ion-navbar>
+  </ion-header>
+    
+
+
+<ion-content padding>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div style="display: block">
+        <canvas  baseChart width="370" height="500"
+                    [datasets]="lineChartData"
+                    [labels]="lineChartLabels"
+                    [options]="lineChartOptions"
+                    [colors]="lineChartColors"
+                    [legend]="lineChartLegend"
+                    [chartType]="lineChartType"
+                    (chartHover)="chartHovered($event)"
+                    (chartClick)="chartClicked($event)"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: block">
+        <canvas baseChart   width="50" height="50" 
+                    [data]="doughnutChartData"
+                    [labels]="doughnutChartLabels"
+                    [colors]="lineChartColors2"
+                    [chartType]="doughnutChartType"
+                    (chartHover)="chartHovered($event)"
+                    (chartClick)="chartClicked($event)"></canvas>
+      </div>
+
+     
+     
+  </ion-content>
+
+  <ion-footer >
+    <ion-toolbar color="medcolor" >
+        
+        <img  src="assets/imgs/sagem.png" >
+    </ion-toolbar>
+</ion-footer>
