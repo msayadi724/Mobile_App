@@ -1217,10 +1217,12 @@ var AuthProvider = (function () {
     /////////////////////////////////////////////////////////////////////////////////// login service //////////////////////////////////////////////////////////////////////////////////////////
     AuthProvider.prototype.login = function (cred) {
         var _this = this;
+        var user = JSON.parse(localStorage.getItem('user'));
         var hash = __WEBPACK_IMPORTED_MODULE_4_crypto_js___default.a.SHA256(cred.password).toString(__WEBPACK_IMPORTED_MODULE_4_crypto_js___default.a.enc.Hex);
         var inscrit = {
             username: cred.username,
             password: hash,
+            email: user.email
         };
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]();
         headers.append('Content-Type', 'application/json');
@@ -1251,7 +1253,10 @@ var AuthProvider = (function () {
         return new Promise(function (resolve) {
             _this.http.post(_this.link + "/users", inscrit, { headers: headers })
                 .map(function (res) { return res.json(); })
-                .subscribe(function (data) { resolve(data); }, function (error) {
+                .subscribe(function (data) {
+                resolve(data);
+                localStorage.setItem('user', JSON.stringify(inscrit));
+            }, function (error) {
                 _this.events.publish('app:toast', "Connection problem !!");
             });
         });

@@ -29,10 +29,12 @@ export class AuthProvider {
   
 /////////////////////////////////////////////////////////////////////////////////// login service //////////////////////////////////////////////////////////////////////////////////////////
   login(cred){
+    let user = JSON.parse(localStorage.getItem('user'));
     let hash = CryptoJS.SHA256(cred.password).toString(CryptoJS.enc.Hex);
     let inscrit={
           username:cred.username,
           password:hash,
+          email: user.email
         };          
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -65,7 +67,9 @@ export class AuthProvider {
       this.http.post(this.link + "/users", inscrit, {headers: headers})
           .map(res => res.json())
           .subscribe(
-            data => {resolve(data)},
+            data => {resolve(data)
+              localStorage.setItem('user', JSON.stringify(inscrit)); 
+            },
             error=> {
               this.events.publish('app:toast',  "Connection problem !!");
             }
