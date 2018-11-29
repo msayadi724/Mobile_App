@@ -17,25 +17,24 @@ export class MainServiceProvider {
   com : any = false ;
 
   constructor(public http: Http, private events: Events) {
-    this.link = 'https://glacial-headland-60557.herokuapp.com/api';
+    this.link = 'https://localhost:8443';
   }
 
   
 
 
 ////////////////////////////////////////////////////////////////////////////////// load data to testlist ////////////////////////////////////////////////////////////////////////////////////    
-  loadHomeData() {
+  loadtrashsData() {
    
-    let local = JSON.parse(localStorage.getItem('jbb-data'));
-    if(local){
-       let User_id = local.user_id;
-       let Token = local.token ;
+    let userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    if(userinfo){
+       let User_id = userinfo.user_id;
+       let Token = userinfo.token ;
        let data ={
       user_id : User_id,
-      token : Token,
-      Salt : local.Salt 
+      token : Token
        }
-    let link = this.link + "/getFakeData";
+    let link = this.link + "/Trashs/loadTrashsdata";
     return new Promise(resolve => {
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
@@ -57,16 +56,15 @@ export class MainServiceProvider {
     
 /////////////////////////////////////////////////////////////////////////////// delete service ////////////////////////////////////////////////////////////////////////////////////////////////
 delete(iditem){
-  let link = this.link + "/deletedata";
-    let local = JSON.parse(localStorage.getItem('jbb-data'));
-     if(local){
-       let User_id = local.user_id;
-       let Token = local.token ;
+  let link = this.link + "/Trashs/deleteTrashdata";
+    let userinfo = JSON.parse(localStorage.getItem('userinfo'));
+     if(userinfo){
+       let User_id = userinfo.user_id;
+       let Token = userinfo.token ;
        let data1 ={
       user_id : User_id,
       token : Token,
       Iditem : iditem,
-      Salt : local.Salt
        }
        return new Promise(resolve => {
         let headers = new Headers();
@@ -85,43 +83,6 @@ delete(iditem){
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////  load data to dashboard ///////////////////////////////////////////////////////////////////////////////////////
-loadHomeData2(iditem) {
-  localStorage.setItem('jbb-data3',iditem);
-  let local = JSON.parse(localStorage.getItem('jbb-data'));
-  if(local){
-     let User_id = local.user_id;
-     let Token = local.token ;
-     let data ={
-    user_id : User_id,
-    token : Token,
-    Iditem :iditem,
-    Salt : local.Salt
-     }
-  let link = this.link + "/dashboarddata";
-  return new Promise(resolve => {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    this.http.post(link, data,  {headers: headers})
-      .map(res => res.json())
-      .subscribe(data => {
-          resolve(data.result);
-          localStorage.setItem('jbb-data1', JSON.stringify(data.result));
-          let local = JSON.parse(localStorage.getItem('jbb-data1'));
-          console.log(local);    
-        }
-        ,(err)=>{
-          this.events.publish('app:hideloading');
-
-          this.events.publish('app:toast', "Error while trying to load data");
-          
-        }
-      );
-  });}
-  }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
 
 }
 

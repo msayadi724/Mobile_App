@@ -34,15 +34,16 @@ export class AuthProvider {
     let inscrit={
           username:cred.username,
           password:hash,
-          email: user.email
+          
         };          
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return new Promise(resolve => {
-      this.http.post(this.link + "/auth", inscrit, {headers: headers})
+      this.http.post(this.link + "/users/login", inscrit, {headers: headers})
           .map(res => res.json())
           .subscribe(
             data => {resolve(data);
+            localStorage.setItem('userinfo', JSON.stringify(data)); 
             console.log(data);},
             error=> {
               this.events.publish('app:toast', "Connection problem !!");
@@ -61,14 +62,16 @@ export class AuthProvider {
       //token: this.Token,
           username:cred.username,
           password:hash,
-          email: cred.email};
+          email: cred.email,
+          lat : 0,
+          lon : 0
+        };
     headers.append('Content-Type', 'application/json');
     return new Promise(resolve => {
-      this.http.post(this.link + "/users", inscrit, {headers: headers})
+      this.http.post(this.link + "/users/register", inscrit, {headers: headers})
           .map(res => res.json())
           .subscribe(
-            data => {resolve(data)
-              localStorage.setItem('user', JSON.stringify(inscrit)); 
+            data => {resolve(data) 
             },
             error=> {
               this.events.publish('app:toast',  "Connection problem !!");
@@ -80,11 +83,11 @@ export class AuthProvider {
 
 
 /////////////////////////////////////////////////////////////////////////////////// add test ////////////////////////////////////////////////////////////////////////////////////////////////  
-  addtest(cred){
+  addtrash2(cred){
     console.log(cred.trush_name)
-    let local = JSON.parse(localStorage.getItem('jbb-data'));
-    if(local){
-      this.User_id = local.user_id;
+    let userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    if(userinfo){
+    console.log(userinfo)
     let headers = new Headers();
     let inscrit={
       trush_name: cred.trush_name,
@@ -95,17 +98,18 @@ export class AuthProvider {
       trush_id : cred.trush_id,
       treatment_number : 0,
       rubbish_weight : 0,
-      user_id : this.User_id,
-      Salt : local.Salt ,
-      token : local.token
+      user_id :userinfo.user_id,
+      token : userinfo.token,
         
         };   
     headers.append('Content-Type', 'application/json');
     return new Promise(resolve => {
-      this.http.post(this.link + "/addTrash", inscrit, {headers: headers})
+      this.http.post(this.link + "/Trashs/addTrash", inscrit, {headers: headers})
           .map(res => res.json())
           .subscribe(
-            data => {resolve(data)},
+            data => {resolve(data)
+            console.log(data)
+            },
             error=> {
               this.events.publish('app:toast', JSON.parse(error._body).message);
             }
@@ -113,75 +117,5 @@ export class AuthProvider {
       })}
   }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-updatetest(cred){
-  let local = JSON.parse(localStorage.getItem('jbb-data'));
-  if(local){
-    this.User_id = local.user_id;
-  let headers = new Headers();
-  let inscrit={
-        test_version :cred.test_version,
-        robot_id : cred.robot_id,
-        test_type: cred.test_type,
-        ssid : cred.ssid,
-        password : cred.password,
-        finished : cred.finished,
-        seconds : cred.seconds,
-        mins : cred.mins,
-        hours : cred.hours,
-        user_id : this.User_id,
-        token  : local.token,
-        Salt : local.Salt,
-        idtest : cred.idtest
-      };   
-  headers.append('Content-Type', 'application/json');
-  return new Promise(resolve => {
-    this.http.post(this.link + "/updatetest", inscrit, {headers: headers})
-        .subscribe(
-          data => {if(data){
-         
-           
-          this.events.publish('app:alerte',"Test Updated","Your test has been successfully updated","1");
-                  
-         }
-          
-           
-          },
-          error=> {
-              
-            this.events.publish('app:alerte',"Test Not Updated","There is a problem while updating this test !!!","1");
-            
-            
-          }
-        )
-    })}
-}
 
-/////////////////////////////////////////////////////////////////////////////////////// get test info /////////////////////////////////////////////////////////////////////////////////////////  
-  gettestinfo(idtest){
-    //let hash = CryptoJS.SHA256(cred.password).toString(CryptoJS.enc.Hex);
-    let local = JSON.parse(localStorage.getItem('jbb-data'));
-    if(local){
-       let User_id = local.user_id;
-       let Token = local.token ;
-       let data ={
-      user_id : User_id,
-      token : Token,
-      idtest :idtest,
-      Salt : local.Salt
-       }
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    return new Promise(resolve => {
-      this.http.post(this.link + "/gettestinfo", data, {headers: headers})
-          .map(res => res.json())
-          .subscribe(
-            data => {resolve(data.result);
-              localStorage.setItem('jbb-data2', JSON.stringify(data.result));   
-            },
-            error=> {
-              this.events.publish('app:toast', JSON.parse(error._body).message);
-            }
-          )
-      })
-  }}
 }

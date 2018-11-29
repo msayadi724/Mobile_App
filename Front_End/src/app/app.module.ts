@@ -4,7 +4,6 @@ import { IonicApp, IonicErrorHandler, IonicModule  } from 'ionic-angular';
 import { HttpModule } from '@angular/http';
 import {ControleProvider} from '../providers/controle/controle';
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
 import {signup} from '../components/signup/signup';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -13,28 +12,27 @@ import { AuthProvider } from '../providers/auth/auth';
 import { MainServiceProvider } from '../providers/main-service/main-service';
 import {PopoverPage} from '../pages/splash/splash';
 import {SplashPage} from '../pages/splash/splash';
-import {tests} from '../pages/tests/tests';
-import { testslist } from '../pages/testslist/testslist';
+import {trashs} from '../pages/trashs/trashs';
+import { trashslist } from '../pages/trashslist/trashslist';
 
 import { SearchPipe } from '../pipes/search/search';
 import { SortPipe } from '../pipes/sort/sort';
 import { ChartsModule } from 'ng2-charts';
-import {StatPage} from '../pages/stats/stats';
 import { IonicImageViewerModule } from 'ionic-img-viewer';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
+   
     AuthenticationComponent,
     signup,
     PopoverPage,
     SplashPage,
-    tests,
-    testslist,
+    trashs,
+    trashslist,
     SearchPipe,
     SortPipe,
-    StatPage
+    
   ],
   imports: [
     BrowserModule,
@@ -48,14 +46,14 @@ import { IonicImageViewerModule } from 'ionic-img-viewer';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
+    
     AuthenticationComponent,
     signup,
     PopoverPage,
     SplashPage,
-    tests,
-    testslist,
-    StatPage
+    trashs,
+    trashslist,
+    
   ],
   providers: [
     StatusBar,

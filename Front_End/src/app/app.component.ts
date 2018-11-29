@@ -3,12 +3,12 @@ import { Nav, Platform, LoadingController, Events, ToastController } from 'ionic
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {signup} from '../components/signup/signup';
-import { HomePage } from '../pages/home/home';
+
 import { AuthenticationComponent } from '../components/authentication/authentication';
 import { SplashPage } from '../pages/splash/splash';
-import { tests } from '../pages/tests/tests';
-import { testslist } from '../pages/testslist/testslist';
-import {StatPage} from '../pages/stats/stats';
+import { trashs } from '../pages/trashs/trashs';
+import { trashslist } from '../pages/trashslist/trashslist';
+
 import { AlertController } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
 @Component({
@@ -40,8 +40,8 @@ export class MyApp {
     this.initializeApp();
     // used for an example of ngFor and navigation
     this.pages = [
-      {title:'Add Trush', component: tests},
-      {title:'Trush List', component: testslist},
+      {title:'Add Trush', component: trashs},
+      {title:'Trush List', component: trashslist},
      
     ];
     this.pageSplash = { title: 'Splash', component: SplashPage};
@@ -136,15 +136,15 @@ export class MyApp {
   initUserLogged(data){
     this.loggedin = true;
     this.user = data;
-    
     localStorage.setItem('jbb-data', JSON.stringify(data));
-    this.nav.setRoot(tests);
+    this.nav.setRoot(trashs);
   }
 
 
   testAuth(){
-    let data = localStorage.getItem('jbb-data');
-    if(!data){
+    
+    let data = localStorage.getItem('userinfo');
+    if(!data ){
       this.nav.setRoot(AuthenticationComponent);
     } else {
       this.user = JSON.parse(data);
@@ -153,20 +153,20 @@ export class MyApp {
 
 
   initComp(){
-    let data = localStorage.getItem('jbb-data');
-    if(!data){
+    
+    let data = localStorage.getItem('userinfo');
+    if(!data ){
       return AuthenticationComponent;
     } else {
       this.user = JSON.parse(data);
-      return tests;
+      return trashs;
     }
   }
 
   
   triggerLoggedOff(){
+    localStorage.removeItem('userinfo');
     localStorage.removeItem('jbb-data');
-    localStorage.removeItem('jbb-data1');
-    localStorage.removeItem('jbb-data2');
     
     this.user=null;
     this.nav.setRoot(AuthenticationComponent);
@@ -180,7 +180,7 @@ export class MyApp {
           text: 'OK',
           handler: () => {
             if(message3 === "1"){
-            this.nav.setRoot(testslist);}
+            this.nav.setRoot(trashslist);}
           }
         }
       ]

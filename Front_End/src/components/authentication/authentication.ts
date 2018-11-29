@@ -3,8 +3,8 @@ import { AuthProvider } from '../../providers/auth/auth';
 //import { HomePage } from '../../pages/home/home';
 import { NavController,Events } from 'ionic-angular';
 import {signup} from '../signup/signup';
-import { HomePage } from '../../pages/home/home';
-import { tests } from '../../pages/tests/tests';
+
+import { trashs } from '../../pages/trashs/trashs';
 /**
  * Generated class for the AuthenticationComponent component.
  *
@@ -43,7 +43,7 @@ export class AuthenticationComponent {
   handleLoginSuccess(Data) {
     this.events.publish('app:setUser', Data);
 
-    this.navCtrl.push(tests);
+    this.navCtrl.push(trashs);
   }
 
   checkLoginDisable(){
