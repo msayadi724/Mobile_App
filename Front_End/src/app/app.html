@@ -11,16 +11,31 @@
 <ion-menu [content]="content">
   <ion-header>
     <ion-toolbar color="medcolor">
-      <ion-title style="margin-left: 6%;">TRUSH MANAGER APP</ion-title>
-      <div *ngIf="user"><h1 style="margin-top:2.5% !important; font-weight:bold; font-size:1.8em; color: brown; margin-left: 10%;">Welcome {{user.username}}</h1></div>
+      <ion-title style="margin-left: 6%;">TRASH MANAGER APP</ion-title>
+      <div *ngIf="user"><h1 style="margin-top:2.5% !important; font-weight:bold; font-size:1.8em; color: brown; margin-left: 10%;"> {{user.useremail}}</h1></div>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
      
 
-    <ion-list *ngIf="user">
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" style=" background-color: beige; border-bottom-color: black ;" large>
+    <ion-list *ngIf="user && master">
+      <button menuClose ion-item *ngFor="let p of pages"  (click)="openPage(p)" style=" background-color: beige; border-bottom-color: black ;" large>
+        <h2 style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;">
+        {{p.title}}
+      </h2>
+      </button>
+      <button menuClose ion-item *ngIf="user"  (click)="triggerLoggedOff()" style=" background-color: beige; border-bottom-color: black ;" large>
+          <h6 style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;">
+              <ion-icon name="log-out" style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;"></ion-icon>
+        Log out
+      </h6>
+      </button>
+
+    </ion-list>
+    
+    <ion-list *ngIf="user && !master">
+      <button menuClose ion-item *ngFor="let p of pages2"  (click)="openPage(p)" style=" background-color: beige; border-bottom-color: black ;" large>
         <h2 style="margin-top:2.5% !important; font-weight:bold; font-size:1em; color: brown;">
         {{p.title}}
       </h2>

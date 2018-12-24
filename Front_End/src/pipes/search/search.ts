@@ -18,7 +18,7 @@ export class SearchPipe implements PipeTransform {
     if(!terms) return items;
     terms = terms.toLowerCase();
     return items.filter( it => {
-      return it.trush_address.toLowerCase().includes(terms); // only filter country name
+      return it.trash_address.toLowerCase().includes(terms); // only filter country name
     });
   }
 }

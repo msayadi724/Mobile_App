@@ -1,0 +1,44 @@
+<ion-header >
+    <ion-navbar color="medcolor">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button> 
+      <ion-title>Trash Info</ion-title>
+    </ion-navbar>
+  </ion-header>
+        
+        <ion-content style=" background-color: beige; border-bottom-color: black ;" >
+            
+           
+            
+          
+            
+               <div><h1 style="font-size: 1.5em; color:brown;">Trash Address :  {{item.trash_address}} </h1></div> 
+               <div><h1 style="font-size: 1.5em; color:brown;">Trash Capacity :   {{item.trash_capacity}}  </h1></div> 
+               <div><h1 style="font-size: 1.5em; color:brown;">Trash Owner :    {{item.owner}} </h1></div> 
+               <div><h1 style="font-size: 1.5em; color:brown;">Trash Id :    {{item.trash_id}} </h1></div>
+               <div><h1 style="font-size: 1.5em; color:brown;">Treatment Number :    {{item.treatment_number}} </h1></div>
+               <div><h1 style="font-size: 1.5em; color:brown;">Rubbish Weight :    {{item.rubbish_weight}} </h1></div>
+               <div><h1 style="font-size: 1.5em; color:brown;">Trash Latitude  :    {{item.trash_al}} </h1></div>
+               <div><h1 style="font-size: 1.5em; color:brown;">Trash  Longitude :    {{item.trash_lg}} </h1></div>
+               
+              
+               
+               <div>
+                  
+  
+                  
+                  
+                  <button ion-button round full style="font-size:120%;" color="medcolor2" (click)="changeinfo(item._id)">Change Trash Information</button>
+                  
+              </div>
+              
+      
+      
+        </ion-content>
+        <ion-footer >
+            <ion-toolbar color="medcolor" >
+                
+              
+            </ion-toolbar>
+        </ion-footer>

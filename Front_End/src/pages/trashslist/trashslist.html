@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button> 
-    <ion-title>Trush List</ion-title>
+    <ion-title>Trash List</ion-title>
   </ion-navbar>
 </ion-header>
       
@@ -11,16 +11,16 @@
           
          
           
-        <ion-item style="widows: 20%; height:20%; background-color: rgb(223, 204, 182); border-bottom-color: black ;">
+        <ion-item style="widows: 10%; height:20%; background-color: rgb(223, 204, 182); border-bottom-color: black ;">
           <ion-searchbar  [(ngModel)]="terms"></ion-searchbar>
-          <button ion-button round full type="button"  (click)="sort()" (click)="manualRefresh()" color="medcolor">Sort</button>
+         
         </ion-item>
           <ion-list >
           <ion-item *ngFor="let item of items  | search : terms | sort: {property: column, order: order}"  style="widows: 40%; height:40%; background-color: beige; border-bottom-color: black ;">
-             <div><h1 style="font-size: 1em;">Trush Name :     {{item.trush_name}}</h1></div> 
-             <div><h1 style="font-size: 1em;">Trush Address :     {{item.trush_address}}</h1></div> 
-             <div><h1 style="font-size: 1em;">Trush Capacity :     {{item.trush_capacity}}</h1></div> 
-             <div><h1 style="font-size: 1em;">Trush ID :     {{item.trush_id}}</h1></div> 
+              
+             <div><h1 style="font-size: 1em;">Trash Address :     {{item.trash_address}}</h1></div> 
+             <div><h1 style="font-size: 1em;">Trash Capacity :     {{item.trash_capacity}}</h1></div> 
+             <div><h1 style="font-size: 1em;">Trash ID :     {{item.trash_id}}</h1></div> 
             
              
              <div>
@@ -28,13 +28,13 @@
 
                 
                 
-                <button ion-button round full style="font-size:120%;" color="medcolor2" (click)="delete(item._id)">Delete</button>
+                <button *ngIf="master" ion-button round full style="font-size:120%;" color="medcolor2" (click)="delete(item._id)">Delete</button>
                 
             </div>
             <div>
-              <button ion-button round full style="font-size:120%; " (click)="stat(item)" color="medcolor" >Status</button>
+              <button ion-button round full style="font-size:120%; " (click)="gettrashinfos(item)" color="medcolor" >Status</button>
             </div>
-            <div><button ion-button round full style="font-size:120%;" color="medcolor2" (click)="dashboard(item)">Go To Maps</button></div>
+            <div><button ion-button round full style="font-size:120%;" color="medcolor2" (click)="gotomap(item)">Go To Map</button></div>
           </ion-item>
       </ion-list>
     

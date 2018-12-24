@@ -1,121 +1,178 @@
 import { Injectable } from '@angular/core';
-import { Http,Headers } from '@angular/http';
-import {  Events } from 'ionic-angular';
+import { Http, Headers } from '@angular/http';
+import { Events } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import CryptoJS from 'crypto-js';
 import { ToastController } from 'ionic-angular';
-/*
-  Generated class for the AuthProvider provider.
 
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
 @Injectable()
 export class AuthProvider {
-  
+
   link: any;
-  Token: any ;
-  User_id : any;
+  Token: any;
+  User_id: any;
 
-  
-  //token = this.local.token;
-  //User_id = this.local.user_id;
 
-  
-  constructor(public http: Http, private events: Events,public toastCtrl: ToastController) {
+  constructor(public http: Http, private events: Events, public toastCtrl: ToastController) {
     this.link = 'https://localhost:8443';
-    
+
   }
-  
-/////////////////////////////////////////////////////////////////////////////////// login service //////////////////////////////////////////////////////////////////////////////////////////
-  login(cred){
+
+  /////////////////////////////////////////////////////////////////////////////////// login service //////////////////////////////////////////////////////////////////////////////////////////
+  login(cred) {
     let user = JSON.parse(localStorage.getItem('user'));
     let hash = CryptoJS.SHA256(cred.password).toString(CryptoJS.enc.Hex);
-    let inscrit={
-          username:cred.username,
-          password:hash,
-          
-        };          
+    let inscrit = {
+      email: cred.email,
+      password: hash,
+
+
+    };
+    console.log(inscrit)
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return new Promise(resolve => {
-      this.http.post(this.link + "/users/login", inscrit, {headers: headers})
-          .map(res => res.json())
-          .subscribe(
-            data => {resolve(data);
-            localStorage.setItem('userinfo', JSON.stringify(data)); 
-            console.log(data);},
-            error=> {
-              this.events.publish('app:toast', "Connection problem !!");
-            }
-          )
-      })
+      this.http.post(this.link + "/users/login", inscrit, { headers: headers })
+        .map(res => res.json())
+        .subscribe(
+          data => {
+            resolve(data);
+            localStorage.setItem('useraccesstoken', JSON.stringify(data.accessToken));
+            localStorage.setItem('userrefreshtoken', JSON.stringify(data.refreshToken));
+            localStorage.setItem('useremail', JSON.stringify(inscrit.email));
+            localStorage.setItem('userpassword', JSON.stringify(inscrit.password));
+            localStorage.setItem('userjwt', JSON.stringify(data.jwt));
+            console.log(data.jwt)
+
+          },
+          error => {
+            resolve(error)
+            this.events.publish('app:toast', "Verify your email or password !!");
+          }
+        )
+    })
   }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-/////////////////////////////////////////////////////////////////////////////////// register service ////////////////////////////////////////////////////////////////////////////////////////
-  register(cred){
+  /////////////////////////////////////////////////////////////////////////////////// register service ////////////////////////////////////////////////////////////////////////////////////////
+  register(cred) {
     let hash = CryptoJS.SHA256(cred.password).toString(CryptoJS.enc.Hex);
     let headers = new Headers();
-    let inscrit={
-      //token: this.Token,
-          username:cred.username,
-          password:hash,
-          email: cred.email,
-          lat : 0,
-          lon : 0
-        };
+    let inscrit = {
+
+      username: cred.username,
+      password: hash,
+      email: cred.email,
+      owner_code : cred.owner_code,
+      region_code : cred.region_code,
+      lat: 0,
+      lon: 0
+    };
     headers.append('Content-Type', 'application/json');
     return new Promise(resolve => {
-      this.http.post(this.link + "/users/register", inscrit, {headers: headers})
+      this.http.post(this.link + "/users/register", inscrit, { headers: headers })
+        .map(res => res.json())
+        .subscribe(
+          data => {
+            resolve(data)
+          },
+          error => {
+            resolve(error);
+
+            let Data: any;
+            Data = JSON.parse(error._body)
+            this.events.publish('app:toast', Data.msg);
+          }
+        )
+    })
+  }
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  /////////////////////////////////////////////////////////////////////////////////// add test ////////////////////////////////////////////////////////////////////////////////////////////////  
+  addtrash2(cred) {
+    let data1 = localStorage.getItem('useraccesstoken');
+    let data2 = localStorage.getItem('userrefreshtoken');
+    let data3 = localStorage.getItem('useremail');
+    let data4 = localStorage.getItem('userpassword');
+    let data5 = localStorage.getItem('userjwt');
+
+    if (data1 || data2 || data3 || data4 || data5) {
+
+      let headers = new Headers();
+      let inscrit = {
+        
+        trash_capacity: cred.trash_capacity,
+        trash_address: cred.trash_address,
+        trash_owner : cred.trash_owner,
+        trash_lg: cred.trash_lg,
+        trash_al: cred.trash_al,
+        trash_id: cred.trash_id,
+        treatment_number: 0,
+        rubbish_weight: 0,
+      };
+
+      let refresh = {
+        refresh_token: JSON.parse(data2),
+        jwt: JSON.parse(data5)
+      }
+
+
+      headers.append('Content-Type', 'application/json');
+
+      var now = Math.floor(Date.now() / 1000);
+
+
+
+      return new Promise(resolve => {
+
+        console.log(now)
+        console.log((parseInt(JSON.parse(data5).exp)))
+
+        if (now >= (parseInt(JSON.parse(data5).exp) - 200)) {
+
+
+          this.http.post(this.link + "/auth/refresh", refresh, { headers: headers })
+            .map(res => res.json())
+            .subscribe(
+              data => {
+                resolve(data)
+                console.log(data)
+                if (data.changed == true) {
+                  localStorage.setItem('useraccesstoken', JSON.stringify(data.access_token));
+                  localStorage.setItem('userjwt', JSON.stringify(data.jwt));
+
+                }
+
+              },
+              error => {
+                resolve(error)
+                console.log(error)
+
+              }
+            )
+        }
+
+
+        let data1 = localStorage.getItem('useraccesstoken');
+        headers.append('authorization', 'Bearer' + ' ' + data1);
+        this.http.post(this.link + "/Trashs/addTrash", inscrit, { headers: headers })
           .map(res => res.json())
           .subscribe(
-            data => {resolve(data) 
+            data => {
+              resolve(data)
+              console.log(data)
             },
-            error=> {
-              this.events.publish('app:toast',  "Connection problem !!");
+            error => {
+              resolve(error)
+              console.log(error)
+              this.events.publish('app:toast', "Error while adding this Trash !!");
             }
           )
       })
+    }
   }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////////// add test ////////////////////////////////////////////////////////////////////////////////////////////////  
-  addtrash2(cred){
-    console.log(cred.trush_name)
-    let userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    if(userinfo){
-    console.log(userinfo)
-    let headers = new Headers();
-    let inscrit={
-      trush_name: cred.trush_name,
-      trush_capacity: cred.trush_capacity,
-      trush_address: cred.trush_address,
-      trush_lg: 0,
-      trush_al: 0,
-      trush_id : cred.trush_id,
-      treatment_number : 0,
-      rubbish_weight : 0,
-      user_id :userinfo.user_id,
-      token : userinfo.token,
-        
-        };   
-    headers.append('Content-Type', 'application/json');
-    return new Promise(resolve => {
-      this.http.post(this.link + "/Trashs/addTrash", inscrit, {headers: headers})
-          .map(res => res.json())
-          .subscribe(
-            data => {resolve(data)
-            console.log(data)
-            },
-            error=> {
-              this.events.publish('app:toast', JSON.parse(error._body).message);
-            }
-          )
-      })}
-  }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

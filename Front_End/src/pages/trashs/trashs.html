@@ -3,7 +3,7 @@
           <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
           </button> 
-          <ion-title>Add Trush</ion-title>
+          <ion-title>Add Trash</ion-title>
         </ion-navbar>
 </ion-header>
 
@@ -12,32 +12,49 @@
 
         <form #data="ngForm" (ngSubmit)="addtrash(data)">
 
+      
         <ion-item style="widows: 15%; height:15%; background-color: beige; border-bottom-color: black ;" >
           
-            <ion-label floating> <ion-icon name="search" ></ion-icon> Trush Name</ion-label>
-            <ion-input  [(ngModel)]="data.trush_name" name="trush_name" type="text" required></ion-input>
+            <ion-label floating> <ion-icon name="search" ></ion-icon> Trash Capacity</ion-label>
+            <ion-input  [(ngModel)]="data.trash_capacity" name="trash_capacity" type="text" required></ion-input>
        
            
         </ion-item>
         <ion-item style="widows: 15%; height:15%; background-color: beige; border-bottom-color: black ;" >
           
-            <ion-label floating> <ion-icon name="search" ></ion-icon> Trush Capacity</ion-label>
-            <ion-input  [(ngModel)]="data.trush_capacity" name="trush_capacity" type="text" required></ion-input>
+            <ion-label floating> <ion-icon name="search" ></ion-icon> Trash Address</ion-label>
+            <ion-input  [(ngModel)]="data.trash_address" name="trash_address" type="text" required></ion-input>
        
            
         </ion-item>
         <ion-item style="widows: 15%; height:15%; background-color: beige; border-bottom-color: black ;" >
           
-            <ion-label floating> <ion-icon name="search" ></ion-icon> Trush Address</ion-label>
-            <ion-input  [(ngModel)]="data.trush_address" name="trush_address" type="text" required></ion-input>
+            <ion-label floating> <ion-icon name="search" ></ion-icon> Trash Latitude</ion-label>
+            <ion-input  [(ngModel)]="data.trash_al" name="trash_al" type="text" required></ion-input>
        
            
         </ion-item>
+        <ion-item style="widows: 15%; height:15%; background-color: beige; border-bottom-color: black ;" >
+          
+            <ion-label floating> <ion-icon name="search" ></ion-icon> Trash  Longitude</ion-label>
+            <ion-input  [(ngModel)]="data.trash_lg" name="trash_lg" type="text" required></ion-input>
+       
+           
+        </ion-item>
+       
     
             <ion-item style="widows: 15%; height:15%; background-color: beige; border-bottom-color: black ;" >
           
-                    <ion-label floating> <ion-icon name="search"></ion-icon>Trush ID</ion-label>
-                    <ion-input  [(ngModel)]="data.trush_id" name="trush_id" type="text" required></ion-input>
+                    <ion-label floating> <ion-icon name="search"></ion-icon>Trash ID</ion-label>
+                    <ion-input  [(ngModel)]="data.trash_id" name="trash_id" type="text" required></ion-input>
+               
+                   
+                </ion-item>
+
+                <ion-item style="widows: 15%; height:15%; background-color: beige; border-bottom-color: black ;" >
+          
+                    <ion-label floating> <ion-icon name="search"></ion-icon>Trash Owner</ion-label>
+                    <ion-input  [(ngModel)]="data.trash_owner" name="trash_owner" type="text" required></ion-input>
                
                    
                 </ion-item>
@@ -45,13 +62,13 @@
 
         <ion-item style="widows: 13%; height:13%; background-color: beige; border-bottom-color: black ;" >
             <div padding>
-               <button ion-button [disabled]="!data.form.valid" type="submit" color="medcolor1" block >Add Trush</button>
+               <button ion-button [disabled]="!data.form.valid" type="submit" color="medcolor1" block >Add Trash</button>
             </div>
           </ion-item>
         </form>
           <ion-item style="widows: 13%; height:13%; background-color: beige; border-bottom-color: black ;" >
                 <div padding>
-                   <button ion-button   color="medcolor2" (click)="gototrushlist()" block >Go To Trush Liste</button>
+                   <button ion-button   color="medcolor2" (click)="gototrushlist()" block >Go To Trash Liste</button>
                 </div>
               </ion-item>
               

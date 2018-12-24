@@ -3,7 +3,7 @@ import { NavController, Events } from 'ionic-angular';
 import { MainServiceProvider } from '../../providers/main-service/main-service';
 
 import { ToastController } from 'ionic-angular';
-
+import { trashinfo } from '../trashinfo/trashinfo';
 import {Observable} from 'rxjs/Rx';
 import * as moment from 'moment';
 @Component({
@@ -21,8 +21,20 @@ export class trashslist {
   order: number;
   column: string = 'test_version';
   private timeoutId: any;
+  permissionlevel : any ;
+  master : boolean = false;
   constructor(public events: Events, public navCtrl: NavController,private mainServiceProvider: MainServiceProvider, public toastCtrl: ToastController,) {
     events.publish('app:testAuth');
+    let data5 = localStorage.getItem('userjwt');
+
+    if(data5){
+
+      this.permissionlevel = (parseInt(JSON.parse(data5).roles))
+      console.log( this.permissionlevel)
+      console.log(typeof this.permissionlevel)
+      this.master = (this.permissionlevel == 1073741824)
+
+    }
     
     this.events.publish('app:showloading');
     this.loadData();
@@ -30,35 +42,8 @@ export class trashslist {
   
   }
   
-  private refresh() {
-    console.log(`Refresh at ${moment().format('LTS')}`);
-  }
+ 
 
-  private stopRefresh() {
-    clearInterval(this.timeoutId);
-  }
-  private initRefresh() {
-    //localStorage.removeItem('jbb-data3');
-    this.refresh();
-    this.timeoutId = setInterval(() => this.refresh(), 5 * 1000);
-  }
-
-  ionViewDidEnter() {
-    this.initRefresh();
-  }
-  
-  ionViewDidLeave() {
-    this.stopRefresh();
-  }
-  manualRefresh() {
-    this.stopRefresh();
-    this.initRefresh();
-  }
-
-  sort(){
-    this.descending = !this.descending;
-    this.order = this.descending ? 1 : -1;
-  }
   
 /////////////////////////////////////////////////////////////////////////////////// load data to testslist ///////////////////////////////////////////////////////////////////////////////// 
 
@@ -86,25 +71,26 @@ loadData(){
     this.mainServiceProvider.delete(iditem)
     .then(data => {
       this.events.publish('app:hideloading');
-      let toast = this.toastCtrl.create({
-        message:'test is deleted',
-        duration: 3000 
-      });
-      toast.present();
+      
       this.loadData();
     }).then((data)=>{ 
     }),(err) => {
       this.events.publish('app:hideloading');
-      let toast = this.toastCtrl.create({
-        message:'test not deleted',
-        duration: 3000   
-      });
-      toast.present();
+      
+     
     };
   }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 
+gettrashinfos(item){
+  this.navCtrl.push(trashinfo , {item : item});
+  }
 
+
+  gotomap(item){
+
+    
+  }
   }
  
  

@@ -24,6 +24,7 @@
 <ion-content class="no-scroll">
   <form #FormRegister="ngForm" (ngSubmit)="Register(FormRegister)">
 
+     
     <ion-item style="widows: 25%; height:25%; background-color: beige; border-bottom-color: black ;">
       <ion-label floating> Username</ion-label>
       <ion-icon name="heart"></ion-icon>
@@ -34,6 +35,17 @@
       <ion-label floating>Email</ion-label>
       <ion-icon name="heart"></ion-icon>
       <ion-input [(ngModel)]="FormRegister.email" name="email" type="email" required></ion-input>
+    </ion-item>
+
+    <ion-item style="widows: 25%; height:25%; background-color: beige; border-bottom-color: black ;">
+      <ion-label floating>Owner Code</ion-label>
+      <ion-icon name="heart"></ion-icon>
+      <ion-input [(ngModel)]="FormRegister.owner_code" name="owner_code" type="owner_code" required></ion-input>
+    </ion-item>
+    <ion-item style="widows: 25%; height:25%; background-color: beige; border-bottom-color: black ;">
+      <ion-label floating>Region Code</ion-label>
+      <ion-icon name="heart"></ion-icon>
+      <ion-input [(ngModel)]="FormRegister.region_code" name="region_code" type="region_code" required></ion-input>
     </ion-item>
 
     <ion-item style="widows: 25%; height:25%; background-color: beige; border-bottom-color: black ;">

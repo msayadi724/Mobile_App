@@ -1,22 +1,17 @@
-//import { Component } from '@angular/core';
+
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ViewController } from 'ionic-angular';
 
 
 import { Slides } from 'ionic-angular';
 import { AuthenticationComponent } from '../../components/authentication/authentication';
-//import {signup} from '../../components/signup/signup';
+
 import {signup} from '../../components/signup/signup';
 import { PopoverController } from 'ionic-angular';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 
 
-/**
- * Generated class for the SplashPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 @IonicPage()
 @Component({
   template: `

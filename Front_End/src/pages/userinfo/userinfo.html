@@ -1,0 +1,41 @@
+<ion-header >
+    <ion-navbar color="medcolor">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button> 
+      <ion-title>User Info</ion-title>
+    </ion-navbar>
+  </ion-header>
+        
+        <ion-content style=" background-color: beige; border-bottom-color: black ;" >
+            
+           
+            
+          
+            
+               <div><h1 style="font-size: 1.5em; color:brown;">Username :  {{item.username}}   </h1></div> 
+               <div><h1 style="font-size: 1.5em; color:brown;">Email :    {{item.email}} </h1></div> 
+               <div><h1 style="font-size: 1.5em; color:brown;">Permission Level :   {{item.permissionLevel}}  </h1></div> 
+               <div><h1 style="font-size: 1.5em; color:brown;">User Code :   {{item.owner_code}}  </h1></div> 
+               <div><h1 style="font-size: 1.5em; color:brown;">Region Code :   {{item.region_code}}  </h1></div> 
+               
+              
+               
+               <div>
+                  
+  
+                  
+                  
+                  <button ion-button round full style="font-size:120%;" color="medcolor2" (click)="changeinfo(item._id)">Change User Information</button>
+                  
+              </div>
+              
+      
+      
+        </ion-content>
+        <ion-footer >
+            <ion-toolbar color="medcolor" >
+                
+              
+            </ion-toolbar>
+        </ion-footer>

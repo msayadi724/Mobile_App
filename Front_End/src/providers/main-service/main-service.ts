@@ -26,24 +26,57 @@ export class MainServiceProvider {
 ////////////////////////////////////////////////////////////////////////////////// load data to testlist ////////////////////////////////////////////////////////////////////////////////////    
   loadtrashsData() {
    
-    let userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    if(userinfo){
-       let User_id = userinfo.user_id;
-       let Token = userinfo.token ;
-       let data ={
-      user_id : User_id,
-      token : Token
-       }
+    let data1 = localStorage.getItem('useraccesstoken');
+    let data2 = localStorage.getItem('userrefreshtoken');
+    let data3 = localStorage.getItem('useremail');
+    let data4 = localStorage.getItem('userpassword');
+    let data5 = localStorage.getItem('userjwt');
+    if (data1 || data2 || data3 || data4 || data5) {
+      
     let link = this.link + "/Trashs/loadTrashsdata";
+
     return new Promise(resolve => {
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
-      this.http.post(link, data,  {headers: headers})
+      
+      let refresh = {
+        refresh_token: JSON.parse(data2),
+        jwt: JSON.parse(data5)
+      }
+      var now = Math.floor(Date.now() / 1000);
+      if (now >= (parseInt(JSON.parse(data5).exp) - 200)) {
+
+
+        this.http.post(this.link  + "/auth/refresh", refresh, { headers: headers })
+          .map(res => res.json())
+          .subscribe(
+            data => {
+              resolve(data)
+              console.log(data)
+              if (data.changed == true) {
+                localStorage.setItem('useraccesstoken', JSON.stringify(data.access_token));
+                localStorage.setItem('userjwt', JSON.stringify(data.jwt));
+
+              }
+
+            },
+            error => {
+              resolve(error)
+              console.log(error)
+
+            }
+          )
+      }
+      headers.append('authorization', 'Bearer'+' '+data1);
+      console.log(headers)
+      this.http.get(link,  {headers: headers})
         .map(res => res.json())
         .subscribe(data => {
+
+          
             resolve(data.result);
            
-            this.items=data.result;       
+                  
           }
           ,(err)=>{
             this.events.publish('app:hideloading');
@@ -57,19 +90,52 @@ export class MainServiceProvider {
 /////////////////////////////////////////////////////////////////////////////// delete service ////////////////////////////////////////////////////////////////////////////////////////////////
 delete(iditem){
   let link = this.link + "/Trashs/deleteTrashdata";
-    let userinfo = JSON.parse(localStorage.getItem('userinfo'));
-     if(userinfo){
-       let User_id = userinfo.user_id;
-       let Token = userinfo.token ;
-       let data1 ={
-      user_id : User_id,
-      token : Token,
+  let data1 = localStorage.getItem('useraccesstoken');
+  let data2 = localStorage.getItem('userrefreshtoken');
+  let data3 = localStorage.getItem('useremail');
+  let data4 = localStorage.getItem('userpassword');
+  let data5 = localStorage.getItem('userjwt');
+  if (data1 || data2 || data3 || data4 || data5) {
+       let TrashInfo ={
+      
       Iditem : iditem,
        }
+       console.log(TrashInfo)
        return new Promise(resolve => {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        this.http.post(link, data1,  {headers: headers})
+        
+
+        let refresh = {
+          refresh_token: JSON.parse(data2),
+          jwt: JSON.parse(data5)
+        }
+        var now = Math.floor(Date.now() / 1000);
+        if (now >= (parseInt(JSON.parse(data5).exp) - 200)) {
+  
+  
+          this.http.post(this.link + "/auth/refresh", refresh, { headers: headers })
+            .map(res => res.json())
+            .subscribe(
+              data => {
+                resolve(data)
+                console.log(data)
+                if (data.changed == true) {
+                  localStorage.setItem('useraccesstoken', JSON.stringify(data.access_token));
+                  localStorage.setItem('userjwt', JSON.stringify(data.jwt));
+  
+                }
+  
+              },
+              error => {
+                resolve(error)
+                console.log(error)
+  
+              }
+            )
+        }
+        headers.append('authorization', 'Bearer'+' '+data1);
+        this.http.post(link , TrashInfo,  {headers: headers})
           .map(res => res.json())
           .subscribe(data => {
               resolve(data.msg); 
@@ -83,6 +149,139 @@ delete(iditem){
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////// load data to testlist ////////////////////////////////////////////////////////////////////////////////////    
+loadusersData() {
+   
+  let data1 = localStorage.getItem('useraccesstoken');
+  let data2 = localStorage.getItem('userrefreshtoken');
+  let data3 = localStorage.getItem('useremail');
+  let data4 = localStorage.getItem('userpassword');
+  let data5 = localStorage.getItem('userjwt');
+
+  if (data1 || data2 || data3 || data4 || data5) {
+    
+  let link = this.link +"/users" ;
+
+  return new Promise(resolve => {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    
+    let refresh = {
+      refresh_token: JSON.parse(data2),
+      jwt: JSON.parse(data5)
+    }
+    var now = Math.floor(Date.now() / 1000);
+    if (now >= (parseInt(JSON.parse(data5).exp) - 200)) {
+
+
+      this.http.post(this.link + "/auth/refresh", refresh, { headers: headers })
+        .map(res => res.json())
+        .subscribe(
+          data => {
+            resolve(data)
+            console.log(data)
+            if (data.changed == true) {
+              localStorage.setItem('useraccesstoken', JSON.stringify(data.access_token));
+              localStorage.setItem('userjwt', JSON.stringify(data.jwt));
+
+            }
+
+          },
+          error => {
+            resolve(error)
+            console.log(error)
+
+          }
+        )
+    }
+    headers.append('authorization', 'Bearer'+' '+data1);
+    console.log(headers)
+    this.http.get(link ,  {headers: headers})
+      .map(res => res.json())
+      .subscribe(data => {
+
+        
+          resolve(data);
+          return  data 
+          
+                 
+        }
+        ,(err)=>{
+          
+          this.events.publish('app:hideloading');
+          this.events.publish('app:toast', "Error while trying to load data");
+        }
+      );
+  });}
+  }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
+  
+
+
+/////////////////////////////////////////////////////////////////////////////// delete service ////////////////////////////////////////////////////////////////////////////////////////////////
+deleteuser(iduser){
+  let link = this.link + "/users/";
+  let data1 = localStorage.getItem('useraccesstoken');
+  let data2 = localStorage.getItem('userrefreshtoken');
+  let data3 = localStorage.getItem('useremail');
+  let data4 = localStorage.getItem('userpassword');
+  let data5 = localStorage.getItem('userjwt');
+  if (data1 || data2 || data3 || data4 || data5) {
+       
+      
+       return new Promise(resolve => {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        
+
+        let refresh = {
+          refresh_token: JSON.parse(data2),
+          jwt: JSON.parse(data5)
+        }
+        var now = Math.floor(Date.now() / 1000);
+        if (now >= (parseInt(JSON.parse(data5).exp) - 200)) {
+  
+  
+          this.http.post(this.link + "/auth/refresh", refresh, { headers: headers })
+            .map(res => res.json())
+            .subscribe(
+              data => {
+                resolve(data)
+                console.log(data)
+                if (data.changed == true) {
+                  localStorage.setItem('useraccesstoken', JSON.stringify(data.access_token));
+                  localStorage.setItem('userjwt', JSON.stringify(data.jwt));
+  
+                }
+  
+              },
+              error => {
+                resolve(error)
+                console.log(error)
+  
+              }
+            )
+        }
+        headers.append('authorization', 'Bearer'+' '+data1);
+        console.log(link )
+        this.http.delete(link + iduser ,  {headers: headers})
+          .map(res => res.json())
+          .subscribe(data => {
+              resolve(data); 
+          }
+            ,(err)=>{
+              this.events.publish('app:hideloading');
+              this.events.publish('app:toast', "Error while trying to fetch data");
+            }
+          );
+      });}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 }
 

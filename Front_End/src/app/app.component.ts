@@ -2,12 +2,14 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, LoadingController, Events, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {signup} from '../components/signup/signup';
+import { signup } from '../components/signup/signup';
 
 import { AuthenticationComponent } from '../components/authentication/authentication';
 import { SplashPage } from '../pages/splash/splash';
 import { trashs } from '../pages/trashs/trashs';
 import { trashslist } from '../pages/trashslist/trashslist';
+import { userslist } from '../pages/userslist/userslist';
+
 
 import { AlertController } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
@@ -21,13 +23,16 @@ export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
   rootPage: any;
-  pages: Array<{title: string, component: any}>;
-  pageLogin: {title: string, component: any};
-  pageSignup: {title: string, component: any};
-  pageSplash: {title: string, component: any};
+  pages: Array<{ title: string, component: any }>;
+  pages2: Array<{ title: string, component: any }>;
+  pageLogin: { title: string, component: any };
+  pageSignup: { title: string, component: any };
+  pageSplash: { title: string, component: any };
   loading: any;
   user: any;
   loggedin: boolean = false;
+  permissionlevel : any;
+  master : boolean;
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
@@ -40,13 +45,22 @@ export class MyApp {
     this.initializeApp();
     // used for an example of ngFor and navigation
     this.pages = [
-      {title:'Add Trush', component: trashs},
-      {title:'Trush List', component: trashslist},
-     
+      { title: 'Add Trash', component: trashs },
+      { title: 'Trash List', component: trashslist },
+      { title: 'User List', component: userslist },
+      
+
     ];
-    this.pageSplash = { title: 'Splash', component: SplashPage};
-    this.pageLogin = { title: 'Login', component: AuthenticationComponent};
-    this.pageSignup = {  title: 'Signup', component: signup};
+    this.pages2 = [
+      
+      { title: 'Trash List', component: trashslist },
+     
+      
+
+    ];
+    this.pageSplash = { title: 'Splash', component: SplashPage };
+    this.pageLogin = { title: 'Login', component: AuthenticationComponent };
+    this.pageSignup = { title: 'Signup', component: signup };
   }
   initializeApp() {
     this.platform.ready().then(() => {
@@ -59,23 +73,10 @@ export class MyApp {
     });
   }
 
- // initializeApp() {
-   // this.platform.ready().then(() => {
-    //  this.statusBar.styleDefault();
-    //  this.splashScreen.hide();
-    //  this.testAuth();
-     // this.rootPage = this.initComp();
-  //  });
- // }
-
-
-  initEvents(){
+  initEvents() {
     // Events
     this.events.subscribe('app:showloading', () => {
       this.presentLoading();
-    });
-    this.events.subscribe('app:alerte', (message1,message2,message3) => {
-      this.presentConfirm(message1,message2,message3);
     });
     this.events.subscribe('app:hideloading', () => {
       this.hideLoading();
@@ -83,13 +84,11 @@ export class MyApp {
     this.events.subscribe('app:toast', (message) => {
       this.presentToast(message);
     });
-    this.events.subscribe('app:toast1', (message) => {
-      this.presentToast1(message);
-    });
-    this.events.subscribe('app:setUser', (data)=>{
-      this.initUserLogged(data);
+   
+    this.events.subscribe('app:setUser', () => {
+      this.initUserLogged();
     })
-    this.events.subscribe('app:testAuth', ()=>{
+    this.events.subscribe('app:testAuth', () => {
       this.testAuth();
     })
   }
@@ -102,10 +101,124 @@ export class MyApp {
   }
 
 
+  
+
+  initUserLogged() {
+    let data1 = localStorage.getItem('useraccesstoken');
+    let data2 = localStorage.getItem('userrefreshtoken');
+    let data3 = localStorage.getItem('useremail');
+    let data4 = localStorage.getItem('userpassword');
+    let data5 = localStorage.getItem('userjwt');
+
+    if (!data1 || !data2 || !data3 || !data4 || !data5) {
+      this.nav.setRoot(AuthenticationComponent);
+    } else {
+      
+      let userdata : any = {
+        useraccesstoken : data1,
+        userrefreshtoken : data2,
+        useremail : data3,
+        userpassword : data4
+      }
+      this.loggedin = true;
+      this.permissionlevel = (parseInt(JSON.parse(data5).roles))
+      console.log( this.permissionlevel)
+      console.log(typeof this.permissionlevel)
+      this.master = (this.permissionlevel == 1073741824)
+
+      this.user = userdata;
+      
+        this.nav.setRoot(trashslist);
+      
+    }
+  }
+
+
+  testAuth() {
+
+
+    let data1 = localStorage.getItem('useraccesstoken');
+    let data2 = localStorage.getItem('userrefreshtoken');
+    let data3 = localStorage.getItem('useremail');
+    let data4 = localStorage.getItem('userpassword');
+    let data5 = localStorage.getItem('userjwt');
+
+    console.log(data1)
+    console.log(data2)
+    console.log(data3)
+    console.log(data4)
+    console.log(JSON.parse(data5))
+    if (!data1 || !data2 || !data3 || !data4 || !data5) {
+      this.nav.setRoot(AuthenticationComponent);
+    } else {
+      
+      let userdata : any = {
+        useraccesstoken : data1,
+        userrefreshtoken : data2,
+        useremail : data3,
+        userpassword : data4
+      }
+      
+      this.user = userdata;
+      this.permissionlevel = (parseInt(JSON.parse(data5).roles))
+      console.log(this.permissionlevel)
+      this.master = (this.permissionlevel == 1073741824)
+      console.log(this.master)
+    }
+  }
+
+
+  initComp() {
+
+    let data1 = localStorage.getItem('useraccesstoken');
+    let data2 = localStorage.getItem('userrefreshtoken');
+    let data3 = localStorage.getItem('useremail');
+    let data4 = localStorage.getItem('userpassword');
+    let data5 = localStorage.getItem('userjwt');
+    console.log(data1)
+    console.log(data2)
+    console.log(data3)
+    console.log(data4)
+    if (!data1 || !data2 || !data3 || !data4 || !data5) {
+      return AuthenticationComponent;
+    } else {
+      
+      let userdata : any = {
+        useraccesstoken : data1,
+        userrefreshtoken : data2,
+        useremail : data3,
+        userpassword : data4
+      }
+      
+      this.user = userdata;
+      this.permissionlevel = (parseInt(JSON.parse(data5).roles))
+      console.log(this.permissionlevel)
+      this.master = (this.permissionlevel == 1073741824)
+      console.log(this.master)
+   
+      return trashslist;
+    
+    }}
+  
+
+
+  triggerLoggedOff() {
+    localStorage.removeItem('useraccesstoken');
+    localStorage.removeItem('userrefreshtoken');
+    localStorage.removeItem('useremail');
+    localStorage.removeItem('userpassword');
+
+    this.user = null;
+    this.nav.setRoot(AuthenticationComponent);
+  }
+
+
+
+
   presentLoading() {
     this.loading = this.loadingCtrl.create({
       content: "Please wait while loading ...",
-      
+
     });
     this.loading.present();
   }
@@ -115,77 +228,14 @@ export class MyApp {
     this.loading.dismiss();
   }
 
-  
+
   presentToast(message) {
     let toast = this.toastCtrl.create({
       message: message,
       duration: 2000
-  
-    });
-    toast.present();
-  }
-  presentToast1(message) {
-    let toast = this.toastCtrl.create({
-      message: message,
-      duration: 2000,
-      position: 'top'
+
     });
     toast.present();
   }
 
-  initUserLogged(data){
-    this.loggedin = true;
-    this.user = data;
-    localStorage.setItem('jbb-data', JSON.stringify(data));
-    this.nav.setRoot(trashs);
-  }
-
-
-  testAuth(){
-    
-    let data = localStorage.getItem('userinfo');
-    if(!data ){
-      this.nav.setRoot(AuthenticationComponent);
-    } else {
-      this.user = JSON.parse(data);
-    }
-  }
-
-
-  initComp(){
-    
-    let data = localStorage.getItem('userinfo');
-    if(!data ){
-      return AuthenticationComponent;
-    } else {
-      this.user = JSON.parse(data);
-      return trashs;
-    }
-  }
-
-  
-  triggerLoggedOff(){
-    localStorage.removeItem('userinfo');
-    localStorage.removeItem('jbb-data');
-    
-    this.user=null;
-    this.nav.setRoot(AuthenticationComponent);
-  }
-  presentConfirm(message1 , message2 , message3) {
-    let alert = this.alertCtrl.create({
-      title: message1,
-      message: message2,
-      buttons: [
-        {
-          text: 'OK',
-          handler: () => {
-            if(message3 === "1"){
-            this.nav.setRoot(trashslist);}
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-  
 }

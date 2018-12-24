@@ -14,7 +14,9 @@ import {PopoverPage} from '../pages/splash/splash';
 import {SplashPage} from '../pages/splash/splash';
 import {trashs} from '../pages/trashs/trashs';
 import { trashslist } from '../pages/trashslist/trashslist';
-
+import { userslist } from '../pages/userslist/userslist';
+import { userinfo } from '../pages/userinfo/userinfo';
+import { trashinfo } from '../pages/trashinfo/trashinfo';
 import { SearchPipe } from '../pipes/search/search';
 import { SortPipe } from '../pipes/sort/sort';
 import { ChartsModule } from 'ng2-charts';
@@ -32,6 +34,9 @@ import { IonicImageViewerModule } from 'ionic-img-viewer';
     trashslist,
     SearchPipe,
     SortPipe,
+    userslist,
+    userinfo,
+    trashinfo
     
   ],
   imports: [
@@ -53,6 +58,9 @@ import { IonicImageViewerModule } from 'ionic-img-viewer';
     SplashPage,
     trashs,
     trashslist,
+    userslist,
+    userinfo,
+    trashinfo
     
   ],
   providers: [

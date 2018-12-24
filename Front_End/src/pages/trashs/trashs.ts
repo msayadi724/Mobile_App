@@ -34,12 +34,13 @@ export class trashs {
 
     
     var dataregister= {
-      trush_name : data.trush_name,
-      trush_capacity : data.trush_capacity,
-      trush_address : data.trush_address,
-      trush_lg : 0,
-      trush_al : 0,
-      trush_id : data.trush_id,
+      
+      trash_capacity : data.trash_capacity,
+      trash_address : data.trash_address,
+      trash_owner : data.trash_owner,
+      trash_lg : data.trash_lg,
+      trash_al : data.trash_al,
+      trash_id : data.trash_id,
       treatment_number : 0,
       rubbish_weight : 0,
         
@@ -48,32 +49,25 @@ export class trashs {
 
         console.log(dataregister)
         
-        this.auth.addtrash2(dataregister).then(Data => {
+        this.auth.addtrash2(dataregister).then( Data => {
           
           if(Data !== 'null'){
-            //var dataname=data.result 
-            let toast = this.toastCtrl.create({
-            message: 'trush has been successfully added',
-            duration: 3000
-          });
-          toast.present();
-          data.trush_name='';
-          data.trush_capacity='';
-          data.trush_address='';
-          data.trush_id='';
-         
+          
+            
+          
+          data.trash_capacity='';
+          data.trash_address='';
+          data.trash_id='';
+          data.trash_owner='';
+          data.trash_al='';
+          data.trash_lg='';
             this.navCtrl.push(trashslist);
             
          }
           else{
             //this.msgerr= data.msg;
-            let toast = this.toastCtrl.create({
-            message:'There is a problem while adding this trush !!!',
-            duration: 3000
+            this.events.publish('app:toast', "There is a problem while adding this trash !!!");
             
-          });
-        
-          toast.present();
           
           }
         });
