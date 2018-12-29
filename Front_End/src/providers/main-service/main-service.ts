@@ -283,5 +283,76 @@ deleteuser(iduser){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+/////////////////////////////////////////////////////////////////////////////// delete service ////////////////////////////////////////////////////////////////////////////////////////////////
+updateuser(data){
+  let link = this.link + "/users/";
+  let data1 = localStorage.getItem('useraccesstoken');
+  let data2 = localStorage.getItem('userrefreshtoken');
+  let data3 = localStorage.getItem('useremail');
+  let data4 = localStorage.getItem('userpassword');
+  let data5 = localStorage.getItem('userjwt');
+  if (data1 || data2 || data3 || data4 || data5) {
+       
+      
+       return new Promise(resolve => {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        
+
+        let refresh = {
+          refresh_token: JSON.parse(data2),
+          jwt: JSON.parse(data5)
+        }
+        var now = Math.floor(Date.now() / 1000);
+        if (now >= (parseInt(JSON.parse(data5).exp) - 200)) {
+  
+  
+          this.http.post(this.link + "/auth/refresh", refresh, { headers: headers })
+            .map(res => res.json())
+            .subscribe(
+              data => {
+                resolve(data)
+                console.log(data)
+                if (data.changed == true) {
+                  localStorage.setItem('useraccesstoken', JSON.stringify(data.access_token));
+                  localStorage.setItem('userjwt', JSON.stringify(data.jwt));
+  
+                }
+  
+              },
+              error => {
+                resolve(error)
+                console.log(error)
+  
+              }
+            )
+        }
+        var userinfo = {
+
+          permissionLevel : data.permissionLevel,
+          owner_code : data.owner_code,
+          region_code : data.region_code
+
+        }
+        console.log(userinfo)
+
+        headers.append('authorization', 'Bearer'+' '+data1);
+        console.log(link )
+        this.http.put(link + data.user_id , userinfo ,   {headers: headers})
+          .map(res => res.json())
+          .subscribe(data => {
+              resolve(data); 
+              console.log(data)
+          }
+            ,(err)=>{
+              
+            }
+          );
+      });}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 }
 

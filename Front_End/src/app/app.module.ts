@@ -16,12 +16,17 @@ import {trashs} from '../pages/trashs/trashs';
 import { trashslist } from '../pages/trashslist/trashslist';
 import { userslist } from '../pages/userslist/userslist';
 import { userinfo } from '../pages/userinfo/userinfo';
+import { HomePage } from '../pages/viewmap/viewmap';
+import { changeuserinfo } from '../pages/changeuserinfo/changeuserinfo';
 import { trashinfo } from '../pages/trashinfo/trashinfo';
 import { SearchPipe } from '../pipes/search/search';
 import { SortPipe } from '../pipes/sort/sort';
 import { ChartsModule } from 'ng2-charts';
 import { IonicImageViewerModule } from 'ionic-img-viewer';
-
+import { Geolocation } from '@ionic-native/geolocation';
+import { MapsProvider } from '../providers/maps/maps';
+import { JsMapsProvider } from '../providers/js-maps/js-maps';
+import { NativeMapsProvider } from '../providers/native-maps/native-maps';
 @NgModule({
   declarations: [
     MyApp,
@@ -36,7 +41,9 @@ import { IonicImageViewerModule } from 'ionic-img-viewer';
     SortPipe,
     userslist,
     userinfo,
-    trashinfo
+    trashinfo,
+    changeuserinfo,
+    HomePage
     
   ],
   imports: [
@@ -60,7 +67,9 @@ import { IonicImageViewerModule } from 'ionic-img-viewer';
     trashslist,
     userslist,
     userinfo,
-    trashinfo
+    trashinfo,
+    changeuserinfo,
+    HomePage
     
   ],
   providers: [
@@ -71,6 +80,10 @@ import { IonicImageViewerModule } from 'ionic-img-viewer';
     MainServiceProvider,
     ControleProvider,
     IonicImageViewerModule,
+    Geolocation,
+    MapsProvider,
+    JsMapsProvider,
+    NativeMapsProvider 
   
     
   ]

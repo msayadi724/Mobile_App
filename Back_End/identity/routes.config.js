@@ -14,7 +14,7 @@ exports.routesConfig = function (app) {
     app.get('/users', [
         
         AuthorizationValidation.validJWTNeeded,
-        //AuthorizationPermission.minimumPermissionLevelRequired(Member),
+        AuthorizationPermission.minimumPermissionLevelRequired(Master),
         IdentityProvider.list
     ]);
     app.get('/users/:userId', [
@@ -53,8 +53,8 @@ exports.routesConfig = function (app) {
     ]);
     app.delete('/users/:userId', [
         AuthorizationValidation.validJWTNeeded,
-        //AuthorizationPermission.minimumPermissionLevelRequired(Master),
-        //AuthorizationPermission.sameUserCantDoThisAction,
+        AuthorizationPermission.minimumPermissionLevelRequired(Master),
+        AuthorizationPermission.sameUserCantDoThisAction,
         IdentityProvider.removeById
     ]);
 };

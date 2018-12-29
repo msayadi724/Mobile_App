@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthProvider } from '../../providers/auth/auth';
 
 import { NavController, AlertController ,  Events , NavParams } from 'ionic-angular';
+import { changeuserinfo } from '../changeuserinfo/changeuserinfo';
 
 
 import { ControleProvider } from '../../providers/controle/controle';
@@ -31,9 +32,9 @@ export class userinfo {
         
   }
 
-  changeinfo(iditem){
+  gotochangeinfo(iduser){
 
-    
+    this.navCtrl.push( changeuserinfo , {iduser : iduser , user : this.item});
   }
       
 

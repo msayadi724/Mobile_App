@@ -21,17 +21,11 @@
                <div><h1 style="font-size: 1.5em; color:brown;">Rubbish Weight :    {{item.rubbish_weight}} </h1></div>
                <div><h1 style="font-size: 1.5em; color:brown;">Trash Latitude  :    {{item.trash_al}} </h1></div>
                <div><h1 style="font-size: 1.5em; color:brown;">Trash  Longitude :    {{item.trash_lg}} </h1></div>
-               
+               <div><h1 *ngIf="item.alert1" style="font-size: 2em; color:rgb(255, 0, 0);">Alert1 :   {{item.msg2 }}    </h1></div>
+               <div><h1  *ngIf="item.alert2" style="font-size: 2em; color:rgb(255, 0, 0);">Alert2 :   {{ item.msg1}}  </h1></div>
               
                
-               <div>
-                  
-  
-                  
-                  
-                  <button ion-button round full style="font-size:120%;" color="medcolor2" (click)="changeinfo(item._id)">Change Trash Information</button>
-                  
-              </div>
+               
               
       
       

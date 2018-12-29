@@ -2,8 +2,7 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://Medsayadi:med24071995@ds135384.mlab.com:35384/smart_trash_database',{useNewUrlParser: true});
 var dataSchema = new mongoose.Schema({
     date_up:Date,
-    trash_name:String,
-    trash_capacity:String,
+    trash_capacity:Number,
     trash_address:String,
     trash_lg:Number,
     trash_al : Number,
@@ -13,7 +12,12 @@ var dataSchema = new mongoose.Schema({
     start:Date,
     finish:Date,
     user_id:String,
-    owner : String
+    owner : String,
+    alert1 : Boolean,
+    alert : Boolean,
+    alert2 : Boolean,
+    msg1 : String,
+    msg2 : String
 
 } );
 dataSchema.pre('save', function (next) {

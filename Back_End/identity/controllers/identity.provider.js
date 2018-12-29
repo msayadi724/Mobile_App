@@ -37,14 +37,9 @@ exports.getById = (req, res) => {
 };
 
 exports.putById = (req, res) => {
-    if (req.body.password) {
-        let salt = crypto.randomBytes(16).toString('base64');
-        let hash = crypto.scryptSync(req.body.password,salt,64,{N:16384}).toString("base64");
-        req.body.password = salt + "$" + hash;
-    }
-    IdentityModel.putIdentity(req.params.userId, req.body)
+    IdentityModel.putIdentity(req.params.userId, req.body , req , res)
         .then((result)=>{
-            req.status(204).send({});
+            
         });
 };
 

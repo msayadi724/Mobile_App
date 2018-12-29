@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, Events } from 'ionic-angular';
+import { NavController, Events,AlertController } from 'ionic-angular';
 import { MainServiceProvider } from '../../providers/main-service/main-service';
 
 import { ToastController } from 'ionic-angular';
@@ -21,7 +21,7 @@ export class userslist {
   order: number;
   column: string = 'test_version';
   private timeoutId: any;
-  constructor(public events: Events, public navCtrl: NavController,private mainServiceProvider: MainServiceProvider, public toastCtrl: ToastController,) {
+  constructor(private alertCtrl: AlertController ,public events: Events, public navCtrl: NavController,private mainServiceProvider: MainServiceProvider, public toastCtrl: ToastController,) {
     events.publish('app:testAuth');
     
     this.events.publish('app:showloading');
@@ -31,7 +31,6 @@ export class userslist {
   }
   
   
- 
   
 /////////////////////////////////////////////////////////////////////////////////// load data to testslist ///////////////////////////////////////////////////////////////////////////////// 
 
@@ -51,20 +50,45 @@ loadData(){
 
 ////////////////////////////////////////////////////////////////////////////////// delete a test in the testslist ///////////////////////////////////////////////////////////////////////////
   deleteuser(iditem){
-    this.events.publish('app:showloading');
-    
-    console.log(iditem);
-    this.mainServiceProvider.deleteuser(iditem)
-    .then(data => {
-      this.events.publish('app:hideloading');
-      
-      this.loadData();
-    }),(err) => {
-      this.events.publish('app:hideloading');
-      
-     
-    };
-  }
+    let alert = this.alertCtrl.create({
+      title: 'Confirmation',
+      message: 'Do You Want Delete This User ??',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            
+           
+            this.events.publish('app:showloading');
+            
+            console.log(iditem);
+            this.mainServiceProvider.deleteuser(iditem)
+            .then(data => {
+              this.events.publish('app:hideloading');
+              
+              this.loadData();
+            }),(err) => {
+              this.events.publish('app:hideloading');
+              
+
+           }
+          
+          }
+          
+        },
+        {
+          text: 'No',
+          handler: () => {
+            
+           
+            
+          
+          }
+          
+        }
+      ]
+    });
+    alert.present();}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 
 

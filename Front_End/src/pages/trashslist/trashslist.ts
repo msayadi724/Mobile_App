@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { NavController, Events } from 'ionic-angular';
+import { NavController, Events,AlertController } from 'ionic-angular';
 import { MainServiceProvider } from '../../providers/main-service/main-service';
 
 import { ToastController } from 'ionic-angular';
 import { trashinfo } from '../trashinfo/trashinfo';
+import { HomePage} from '../viewmap/viewmap';
 import {Observable} from 'rxjs/Rx';
 import * as moment from 'moment';
+import { Geolocation } from '@ionic-native/geolocation';
 @Component({
   selector: 'page-trashslist',
   templateUrl: 'trashslist.html',
@@ -23,7 +25,14 @@ export class trashslist {
   private timeoutId: any;
   permissionlevel : any ;
   master : boolean = false;
-  constructor(public events: Events, public navCtrl: NavController,private mainServiceProvider: MainServiceProvider, public toastCtrl: ToastController,) {
+
+
+  location: {
+    latitude: number,
+    longitude: number
+  };
+  constructor(private alertCtrl: AlertController , public events: Events, public navCtrl: NavController,private mainServiceProvider: MainServiceProvider, public toastCtrl: ToastController,
+     public geolocation: Geolocation) {
     events.publish('app:testAuth');
     let data5 = localStorage.getItem('userjwt');
 
@@ -42,9 +51,58 @@ export class trashslist {
   
   }
   
- 
-
   
+
+  private refresh() {
+   
+        this.loadData();
+        this.findUserLocation();
+       
+    
+  }
+  private stopRefresh() {
+    clearInterval(this.timeoutId);
+  }
+  private initRefresh() {
+    this.refresh();
+    this.timeoutId = setInterval(() => this.refresh(), 1 * 1000);
+  }
+
+  ionViewDidEnter() {
+    this.initRefresh();
+  }
+  
+  ionViewDidLeave() {
+    this.stopRefresh();
+  }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ionViewDidLoad() {
+          console.log('eeeeeeeeeeeeeeee')
+          this.findUserLocation();
+        }
+
+findUserLocation(){
+  let options = {
+    enableHighAccuracy: true,
+    timeout: 25000
+  };
+  this.geolocation.getCurrentPosition(options).then((position) => {
+ 
+    this.location = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    };
+   console.log(this.location)
+   }).catch((error) => {
+     console.log('Error getting location', error);
+   });
+}
+
+
+
 /////////////////////////////////////////////////////////////////////////////////// load data to testslist ///////////////////////////////////////////////////////////////////////////////// 
 
 loadData(){
@@ -65,20 +123,46 @@ loadData(){
 
 ////////////////////////////////////////////////////////////////////////////////// delete a test in the testslist ///////////////////////////////////////////////////////////////////////////
   delete(iditem){
-    this.events.publish('app:showloading');
+    let alert = this.alertCtrl.create({
+      title: 'Confirmation',
+      message: 'Do You Want Delete This Trash ??',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            
+            this.events.publish('app:showloading');
     
-    console.log(iditem);
-    this.mainServiceProvider.delete(iditem)
-    .then(data => {
-      this.events.publish('app:hideloading');
-      
-      this.loadData();
-    }).then((data)=>{ 
-    }),(err) => {
-      this.events.publish('app:hideloading');
-      
-     
-    };
+            console.log(iditem);
+            this.mainServiceProvider.delete(iditem)
+            .then(data => {
+              this.events.publish('app:hideloading');
+              
+              this.loadData();
+            }).then((data)=>{ 
+            }),(err) => {
+              this.events.publish('app:hideloading');
+              
+             
+            };
+
+           }
+          
+        },
+        {
+          text: 'No',
+          handler: () => {
+            
+           
+            
+          
+          }
+          
+        }
+      ]
+    });
+    alert.present();
+   
   }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 
@@ -88,7 +172,7 @@ gettrashinfos(item){
 
 
   gotomap(item){
-
+    this.navCtrl.push(HomePage, {item : item});
     
   }
   }

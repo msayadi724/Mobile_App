@@ -1,0 +1,61 @@
+<ion-header >
+    <ion-navbar color="medcolor">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button> 
+      <ion-title>Change User Info</ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content >
+
+    <form #data="ngForm" (ngSubmit)="updateuser(data)">
+
+    <ion-item style="widows: 15%; height:15%; background-color: beige; border-bottom-color: black ;" >
+      
+        <ion-label floating> <ion-icon name="search" ></ion-icon>Region Code</ion-label>
+        <ion-input  [(ngModel)]="data.region_code" name="region_code" type="text" required></ion-input>
+   
+       
+    </ion-item>
+    <ion-item style="widows: 15%; height:15%; background-color: beige; border-bottom-color: black ;" >
+      
+        <ion-label floating> <ion-icon name="search" ></ion-icon>Owner Code</ion-label>
+        <ion-input  [(ngModel)]="data.owner_code" name="owner_code" type="text" required></ion-input>
+   
+       
+    </ion-item>
+    <ion-item style="widows: 15%; height:15%; background-color: beige; border-bottom-color: black ;" >
+      
+            <ion-label floating> <ion-icon name="search"></ion-icon> Permission Level</ion-label>
+            
+            <ion-select [(ngModel)]="data.permissionlevel" name="permisiionlevel">
+              <ion-option value="surfer">Simple User</ion-option>
+              <ion-option value="master">Admin</ion-option>
+            </ion-select>
+       
+           
+        </ion-item>
+       
+           
+    <ion-item style="widows: 13%; height:13%; background-color: beige; border-bottom-color: black ;" >
+        <div padding>
+           <button ion-button [disabled]="!data.form.valid" type="submit" color="medcolor1" block >Update User</button>
+        </div>
+      </ion-item>
+    </form>
+      <ion-item style="widows: 13%; height:13%; background-color: beige; border-bottom-color: black ;" >
+            <div padding>
+               <button ion-button   color="medcolor2" (click)="gotouserinfo()" block >Go To User Info</button>
+            </div>
+          </ion-item>
+          
+
+    </ion-content>   
+    <ion-footer >
+            <ion-toolbar color="medcolor" >
+                
+               
+            </ion-toolbar>
+        </ion-footer>

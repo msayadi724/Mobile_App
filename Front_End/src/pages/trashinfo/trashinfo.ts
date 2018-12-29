@@ -31,10 +31,7 @@ export class trashinfo {
         
   }
 
-  changeinfo(iditem){
-
-    
-  }
+  
       
 
 

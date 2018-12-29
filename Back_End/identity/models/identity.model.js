@@ -61,11 +61,14 @@ exports.list = (req,res,perPage, page) => {
     });
 };
 
-exports.putIdentity = (id,identityData) => {
+exports.putIdentity = (id,identityData , req , res) => {
     return new Promise((resolve, reject) => {
-        Identity.findByIdAndUpdate(id,identityData,function (err,user) {
+        Identity.findOneAndUpdate({_id :id},{owner_code : identityData.owner_code, region_code : identityData.region_code , 
+        permissionLevel : identityData.permissionLevel},{new: true},function (err,user) {
             if (err) reject(err);
             resolve(user);
+            console.log(user)
+            res.status(204).send({user :user});
         });
     });
 };
