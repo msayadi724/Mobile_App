@@ -17,7 +17,9 @@ export class MainServiceProvider {
   com : any = false ;
 
   constructor(public http: Http, private events: Events) {
+   //this.link = 'https://192.168.43.202:8443';
     this.link = 'https://localhost:8443';
+
   }
 
   

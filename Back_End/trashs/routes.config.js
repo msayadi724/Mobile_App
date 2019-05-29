@@ -7,7 +7,20 @@ const Master = config.permissionLevels.Master;
 const Member = config.permissionLevels.Member;
 const Surfer = config.permissionLevels.Surfer;
 var mqtt    = require('mqtt');
-var client  = mqtt.connect("mqtt://localhost:127.0.0.1:1883",{clientId:"mqttjs01"});
+var options = {
+    port: 10957,
+    host: 'mqtt://m23.cloudmqtt.com',
+    clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
+    username: 'mohamed',
+    password: '1995',
+    keepalive: 60,
+    reconnectPeriod: 1000,
+    protocolId: 'MQIsdp',
+    protocolVersion: 3,
+    clean: true,
+    encoding: 'utf8'
+};
+var client = mqtt.connect('mqtt://m23.cloudmqtt.com', options);
 var topic="test";
 
 console.log("connected flag  "+client.connected);
@@ -20,12 +33,12 @@ console.log("connected  "+client.connected);
 client.subscribe(topic,{qos:1});
 
 client.on('message',function(topic, message, packet){
-    
+    if(message){
     var buf = Buffer.from(message)
     var temp = JSON.parse(buf.toString());
 
           var msg1=message.toString()
-          trashsProvider.verifTrash(msg1)
+          trashsProvider.verifTrash(msg1)}
 })
 
 

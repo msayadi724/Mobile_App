@@ -1,0 +1,4 @@
+#Fri Jan 04 04:38:11 WAT 2019
+base.0=C\:\\Users\\asus\\Desktop\\Smart_Trash\\Front_End\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+path.0=classes.dex
+renamed.0=classes.dex

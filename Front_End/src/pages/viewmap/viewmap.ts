@@ -92,7 +92,7 @@ export class HomePage {
            this.directionsDisplay.setMap(this.map);
            this.directionsService.route({
              origin: {lat:pos.coords.latitude, lng:pos.coords.longitude},
-             destination: {lat: position.trash_lg, lng:  position.trash_al},
+             destination: {lat: position.trash_al, lng:  position.trash_lg},
              travelMode: 'DRIVING'
          }, (res, status) => {
            console.log(status)

@@ -50,7 +50,7 @@ if(parseInt(req.jwt.roles) == 1073741824){
         }});}
 
         else{
-            console.log(req.jwt)
+           // console.log(req.jwt)
 
             var codes = req.jwt.jti.toString().split('$');
             Trash.find({ owner : codes[0] }).exec(function(err, data){
@@ -99,33 +99,37 @@ exports.verifTrash = (msg) => {
     var cltalert = false ;
     var cltalert1 = false ;
     var cltalert2 = false ;
-    var alertmsg = ["it's ok","it's ok"] ;
+    var alertmsg = ['Trash position is changed','Trash is full'] ;
 
     if (msg) {
        
         msg = JSON.parse(msg)
     Trash.find({trash_id : msg.id}, function(err,data){
        
-        var dist =Math.sqrt((data[0].trash_al-msg.alt)^2+(data[0].trash_lg-msg.long)^2)
-       console.log(dist)
+        var dist = 11 * 10000 * Math.sqrt((data[0].trash_al-msg.alt)^2+(data[0].trash_lg-msg.long)^2)
+       
         if(dist >= 10 ){
-
+            console.log(dist)
             cltalert1 = true;
             cltalert = true;
-            alertmsg[0] = 'Trash position is changed';
+            //alertmsg[0] = 'Trash position is changed';
 
         }
-        console.log(parseInt(data[0].trash_capacity))
-        console.log(parseInt(msg.rubbish_weight))
+        //console.log(parseInt(data[0].trash_capacity))
+        //console.log(parseInt(msg.rubbish_weight))
         if(parseInt(data[0].trash_capacity) === parseInt(msg.rubbish_weight)){
 
             cltalert2 = true;
             cltalert = true;
-            alertmsg[0] = 'Trash is full';
+            //alertmsg[1] = 'Trash is full';
 
         }
-       
-        Trash.findOneAndUpdate({trash_id : msg.id },{ $set : {trash_al :msg.lat,trash_lg :msg.long,rubbish_weight : msg.rubbish_weight ,alert: cltalert ,  alert1 : cltalert1 , alert2 : cltalert2 , msg1 : alertmsg[0] , msg2 : alertmsg[1] }},
+
+        if(cltalert1 && cltalert2 ){
+
+        var b = cltalert1 && cltalert2 ;    
+        Trash.findOneAndUpdate({trash_id : msg.id },{ $set : {trash_al :msg.lat,trash_lg :msg.long,rubbish_weight : msg.rubbish_weight ,alert: b,  
+            alert1 : cltalert1 , alert2 : cltalert2 , msg1 : alertmsg[0] , msg2 : alertmsg[1] }},
             {new: true}, function(err, doc){
             if (err) {
 
@@ -134,7 +138,68 @@ exports.verifTrash = (msg) => {
                
             }
             
-        });
+        });}else
+        
+        if(cltalert2 && !cltalert1){
+
+            var b = !cltalert1 && cltalert2 ;
+
+            Trash.findOneAndUpdate({trash_id : msg.id },{ $set : {trash_al :msg.lat,trash_lg :msg.long,rubbish_weight : msg.rubbish_weight ,alert: cltalert ,  
+                alert1 : data[0].alert1, alert2 : cltalert2 ,msg1 : alertmsg[0] , msg2 : alertmsg[1] }},
+                {new: true}, function(err, doc){
+                if (err) {
+    
+                }else{
+                    console.log(doc)
+                   
+                }
+                
+            });
+
+
+        }else
+
+
+        if(cltalert1 && !cltalert2){
+
+            var b = cltalert1 && !cltalert2 ;
+
+            Trash.findOneAndUpdate({trash_id : msg.id },{ $set : {trash_al :msg.lat,trash_lg :msg.long,rubbish_weight : msg.rubbish_weight ,alert: cltalert ,  
+                alert1 : cltalert1 , alert2 : false ,msg1 : alertmsg[0] , msg2 : alertmsg[1] }},
+                {new: true}, function(err, doc){
+                if (err) {
+    
+                }else{
+                    console.log(doc)
+                   
+                }
+                
+            });
+
+            
+        }else
+
+        if(!cltalert1 && !cltalert2){
+
+
+
+            Trash.findOneAndUpdate({trash_id : msg.id },{ $set : {trash_al :msg.lat,trash_lg :msg.long,rubbish_weight : msg.rubbish_weight ,
+                alert: data[0].alert1 ,  alert1 : data[0].alert1 , alert2 : false , msg1 : alertmsg[0] , msg2 : alertmsg[1]}},
+                {new: true}, function(err, doc){
+                if (err) {
+    
+                }else{
+                    
+                   
+                }
+                
+            });
+
+
+
+        }
+
+
     } ) 
        
          

@@ -19,7 +19,7 @@ exports.routesConfig = function (app) {
         
         Validator.verifyRefreshBodyField,
         Validator.validRefreshNeeded,
-        //IdentityChecker.isUserStillExistsWithSamePrivileges,
+        IdentityChecker.isUserStillExistsWithSamePrivileges,
         Authenticator.refresh_token
     ]);
 

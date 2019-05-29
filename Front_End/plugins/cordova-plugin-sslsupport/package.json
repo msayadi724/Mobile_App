@@ -1,0 +1,55 @@
+{
+  "_from": "cordova-plugin-sslsupport",
+  "_id": "cordova-plugin-sslsupport@1.0.5",
+  "_inBundle": false,
+  "_integrity": "sha512-6G1d8ga6a48E/kva8idNUBF9L39+Oiof98K16dUHGYosuGu0xk6pQIvcTJxq9lg8gjRyIvLBleUKuXQkR//ieQ==",
+  "_location": "/cordova-plugin-sslsupport",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-sslsupport",
+    "name": "cordova-plugin-sslsupport",
+    "escapedName": "cordova-plugin-sslsupport",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-sslsupport/-/cordova-plugin-sslsupport-1.0.5.tgz",
+  "_shasum": "9359fe7c324e0c26e5fc231e5a910e9807af82e2",
+  "_spec": "cordova-plugin-sslsupport",
+  "_where": "C:\\Users\\asus\\Desktop\\Smart_Trash\\Front_End",
+  "author": {
+    "name": "WalletHub"
+  },
+  "bugs": {
+    "url": "https://github.com/Wallethub/cordova-plugin-sslsupport/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-sslsupport",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova HTTP plugin with SSL Pinning for iOS (AFnetworking) and Android (OKhttp3)",
+  "homepage": "https://github.com/Wallethub/cordova-plugin-sslsupport#readme",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "license": "ISC",
+  "name": "cordova-plugin-sslsupport",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wallethub/cordova-plugin-sslsupport.git"
+  },
+  "version": "1.0.5"
+}

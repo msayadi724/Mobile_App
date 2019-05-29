@@ -2,11 +2,17 @@
 
 var MYTIMEOUT = 30000;
 
-var isWP8 = /IEMobile/.test(navigator.userAgent); // Matches WP(7/8/8.1)
-var isWindows = /Windows /.test(navigator.userAgent); // Windows
+var isWindows = /MSAppHost/.test(navigator.userAgent);
 var isAndroid = !isWindows && /Android/.test(navigator.userAgent);
-var isMac = /Macintosh/.test(navigator.userAgent);
-var isWKWebView = !isWindows && !isAndroid && !isWP8 && !isMac && !!window.webkit && !!window.webkit.messageHandlers;
+var isFirefox = /Firefox/.test(navigator.userAgent);
+var isWebKitBrowser = !isWindows && !isAndroid && /Safari/.test(navigator.userAgent);
+var isBrowser = isWebKitBrowser || isFirefox;
+var isEdgeBrowser = isBrowser && (/Edge/.test(navigator.userAgent));
+var isChromeBrowser = isBrowser && !isEdgeBrowser && (/Chrome/.test(navigator.userAgent));
+var isMac = !isBrowser && /Macintosh/.test(navigator.userAgent);
+var isAppleMobileOS = /iPhone/.test(navigator.userAgent) ||
+      /iPad/.test(navigator.userAgent) || /iPod/.test(navigator.userAgent);
+var hasMobileWKWebView = isAppleMobileOS && !!window.webkit && !!window.webkit.messageHandlers;
 
 // NOTE: While in certain version branches there is no difference between
 // the default Android implementation and implementation #2,
@@ -24,6 +30,9 @@ var mytests = function() {
   for (var i=0; i<pluginScenarioCount; ++i) {
 
     describe(pluginScenarioList[i] + ': sql operations via plugin-specific db.executeSql test(s)', function() {
+      // TBD skip plugin test on browser platform (not yet supported):
+      if (isBrowser) return;
+
       var scenarioName = pluginScenarioList[i];
       var suiteName = scenarioName + ': ';
       var isImpl2 = (i === 1);
@@ -107,7 +116,7 @@ var mytests = function() {
             expect(rs).toBeDefined();
             expect(rs.rows).toBeDefined();
             expect(rs.rows.length).toBe(1);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(0).myresult).toBe('real');
             else if (isAndroid && isImpl2)
               expect(rs.rows.item(0).myresult).toBe('text');
@@ -151,7 +160,7 @@ var mytests = function() {
             expect(rs).toBeDefined();
             expect(rs.rows).toBeDefined();
             expect(rs.rows.length).toBe(1);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(0).myresult).toBe('real');
             else if (isAndroid && isImpl2)
               expect(rs.rows.item(0).myresult).toBe('text');
@@ -279,7 +288,7 @@ var mytests = function() {
             expect(rs).toBeDefined();
             expect(rs.rows).toBeDefined();
             expect(rs.rows.length).toBe(1);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(0).myresult).toBe('real');
             else if (isAndroid && isImpl2)
               expect(rs.rows.item(0).myresult).toBe('text');
@@ -358,8 +367,6 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'db.executeSql check SELECT TYPEOF(?) with [Infinity] for parameter argument array [TBD Android/iOS/macOS plugin result]', function(done) {
-          if (isWP8) pending('SKIP for WP8'); // SKIP for now
-
           var db = openDatabase('DB-sql-SELECT-TYPEOF-infinity.db');
           expect(db).toBeDefined();
 
@@ -383,7 +390,6 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'db.executeSql check SELECT ? with [Infinity] for parameter argument array [TBD Android/iOS/macOS plugin result]', function(done) {
-          if (isWP8) pending('SKIP for WP8'); // SKIP for now
           if (isMac) pending('SKIP for macOS [CRASH]'); // FUTURE TBD
 
           var db = openDatabase('DB-sql-SELECT-infinity.db');
@@ -409,8 +415,6 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'db.executeSql check SELECT TYPEOF(?) with [-Infinity] for parameter argument array [TBD Android/iOS/macOS plugin result]', function(done) {
-          if (isWP8) pending('SKIP for WP8'); // SKIP for now
-
           var db = openDatabase('DB-sql-SELECT-TYPEOF-minus-infinity.db');
           expect(db).toBeDefined();
 
@@ -434,7 +438,6 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'db.executeSql check SELECT ? with [-Infinity] for parameter argument array [TBD Android/iOS/macOS plugin result]', function(done) {
-          if (isWP8) pending('SKIP for WP8'); // SKIP for now
           if (isMac) pending('SKIP for macOS [CRASH]'); // FUTURE TBD
 
           var db = openDatabase('DB-sql-SELECT-minus-infinity.db');
@@ -503,22 +506,22 @@ var mytests = function() {
             expect(rs.rows).toBeDefined();
             expect(rs.rows.length).toBe(9);
             expect(rs.rows.item(0).d1).toBe(101);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(0).t1).toBe('real');
             else
               expect(rs.rows.item(0).t1).toBe('integer');
             expect(rs.rows.item(0).a1).toBe(101);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(0).u1).toBe('101.0');
             else
               expect(rs.rows.item(0).u1).toBe('101');
             expect(rs.rows.item(1).d1).toBe(-101);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(1).t1).toBe('real');
             else
               expect(rs.rows.item(1).t1).toBe('integer');
             expect(rs.rows.item(1).a1).toBe(101);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(1).u1).toBe('-101.0');
             else
               expect(rs.rows.item(1).u1).toBe('-101');
@@ -531,22 +534,22 @@ var mytests = function() {
             expect(rs.rows.item(3).a1).toBe(123.456);
             expect(rs.rows.item(3).u1).toBe('-123.456');
             expect(rs.rows.item(4).d1).toBe(1234567890123);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(4).t1).toBe('real');
             else
               expect(rs.rows.item(4).t1).toBe('integer');
             expect(rs.rows.item(4).a1).toBe(1234567890123);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(4).u1).toBe('1234567890123.0');
             else
               expect(rs.rows.item(4).u1).toBe('1234567890123');
             expect(rs.rows.item(5).d1).toBe(-1234567890123);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(5).t1).toBe('real');
             else
               expect(rs.rows.item(5).t1).toBe('integer');
             expect(rs.rows.item(5).a1).toBe(1234567890123);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(5).u1).toBe('-1234567890123.0');
             else
               expect(rs.rows.item(5).u1).toBe('-1234567890123');
@@ -559,12 +562,12 @@ var mytests = function() {
             expect(rs.rows.item(7).a1).toBe(1234567890123.4);
             expect(rs.rows.item(7).u1).toBe('-1234567890123.4');
             expect(rs.rows.item(8).d1).toBe(0);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(8).t1).toBe('real');
             else
               expect(rs.rows.item(8).t1).toBe('integer');
             expect(rs.rows.item(8).a1).toBe(0);
-            if (isMac || isWKWebView)
+            if (isMac || hasMobileWKWebView)
               expect(rs.rows.item(8).u1).toBe('0.0');
             else
               expect(rs.rows.item(8).u1).toBe('0');
@@ -598,7 +601,6 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'db.executeSql store Infinity/NaN values and check [TBD Android/iOS plugin result]', function(done) {
-          if (isWP8) pending('SKIP for WP8'); // SKIP for now
           if (isMac) pending('SKIP for macOS [CRASH]'); // FUTURE TBD
 
           var db = openDatabase('DB-sql-store-infinity-nan-values-and-check.db');
@@ -848,8 +850,6 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'Multi-row INSERT with parameters in db.executeSql test', function(done) {
-          if (isWP8) pending('SKIP: NOT SUPPORTED for WP8');
-
           var db = openDatabase('Multi-row-INSERT-with-parameters-in-db-sql-test.db');
 
           db.executeSql('DROP TABLE IF EXISTS TestTable;');
@@ -978,16 +978,12 @@ var mytests = function() {
             expect(error.message).toBeDefined();
             check1 = true;
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/near \"SLCT\": syntax error/);
@@ -1021,16 +1017,12 @@ var mytests = function() {
             expect(error.message).toBeDefined();
             check1 = true;
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/near \"SLCT\": syntax error/);
@@ -1062,16 +1054,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows || (isAndroid && isImpl2))
+            if (isWindows || (isAndroid && isImpl2))
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/near \"true\": syntax error/);
@@ -1094,16 +1082,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows || (isAndroid && isImpl2))
+            if (isWindows || (isAndroid && isImpl2))
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/near \"false\": syntax error/);
@@ -1126,16 +1110,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows || (isAndroid && isImpl2))
+            if (isWindows || (isAndroid && isImpl2))
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/near \"Infinity\": syntax error/);
@@ -1158,16 +1138,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows || (isAndroid && isImpl2))
+            if (isWindows || (isAndroid && isImpl2))
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/near \"-\": syntax error/);
@@ -1190,16 +1166,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows || (isAndroid && isImpl2))
+            if (isWindows || (isAndroid && isImpl2))
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/near \"NaN\": syntax error/);
@@ -1222,16 +1194,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows || (isAndroid && isImpl2))
+            if (isWindows || (isAndroid && isImpl2))
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/near \"SLCT\": syntax error/);
@@ -1254,16 +1222,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows || (isAndroid && isImpl2))
+            if (isWindows || (isAndroid && isImpl2))
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/near \"SLCT\": syntax error/);
@@ -1505,16 +1469,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows || (isAndroid && isImpl2))
+            if (isWindows || (isAndroid && isImpl2))
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/near \"SELCT\": syntax error/);
@@ -1533,16 +1493,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows || (isAndroid && isImpl2))
+            if (isWindows || (isAndroid && isImpl2))
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/no such function: uper/);
@@ -1553,28 +1509,27 @@ var mytests = function() {
             // and finish this test:
             db.close(done, done);
           });
-        });
+        }, MYTIMEOUT);
 
       });
 
       describe(pluginScenarioList[i] + ': additional db.executeSql test(s)', function() {
 
         it(suiteName + 'PRAGMA & multiple database transaction combination test', function(done) {
-          var db = openDatabase('DB1');
-
+          var db1 = openDatabase('DB1');
           var db2 = openDatabase('DB2');
 
-          // Replacement for QUnit stop()/start() functions:
+          // From QUnit replacement:
           var checkCount = 0;
           var expectedCheckCount = 2;
 
-          db.transaction(function(tx) {
+          db1.transaction(function(tx) {
             tx.executeSql('DROP TABLE IF EXISTS test_table');
             tx.executeSql('CREATE TABLE IF NOT EXISTS test_table (id INTEGER PRIMARY KEY, data TEXT, data_num INTEGER)');
 
             ++expectedCheckCount;
 
-            db.executeSql('PRAGMA table_info (test_table);', [], function(resultSet) {
+            db1.executeSql('PRAGMA table_info (test_table);', [], function(resultSet) {
               ++checkCount;
 
               expect(resultSet).toBeDefined();
@@ -1599,7 +1554,7 @@ var mytests = function() {
             tx.executeSql('DROP TABLE IF EXISTS tt2');
             tx.executeSql('CREATE TABLE IF NOT EXISTS tt2 (id2 INTEGER PRIMARY KEY, data2 TEXT, data_num2 INTEGER)');
 
-            db.executeSql('PRAGMA table_info (test_table);', [], function(resultSet) {
+            db1.executeSql('PRAGMA table_info (test_table);', [], function(resultSet) {
               ++checkCount;
 
               expect(resultSet).toBeDefined();
@@ -1619,7 +1574,8 @@ var mytests = function() {
               expect(resultRow3).toBeDefined();
               expect(resultRow3.name).toBe('data_num');
 
-              if (checkCount === expectedCheckCount) db.close(done, done);
+              // From QUnit replacement:
+              if (checkCount === expectedCheckCount) done();
             });
 
             db2.executeSql("PRAGMA table_info (tt2);", [], function(resultSet) {
@@ -1642,10 +1598,11 @@ var mytests = function() {
               expect(resultRow3).toBeDefined();
               expect(resultRow3.name).toBe('data_num2');
 
-              if (checkCount === expectedCheckCount) db.close(done, done);
+              // From QUnit replacement:
+              if (checkCount === expectedCheckCount) done();
             });
           });
-        });
+        }, MYTIMEOUT);
 
       });
 
