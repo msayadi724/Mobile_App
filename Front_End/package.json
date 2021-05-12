@@ -28,7 +28,7 @@
         "@ionic-native/status-bar": "3.12.1",
         "@ionic/storage": "^2.0.1",
         "android": "0.0.8",
-        "chart.js": "^2.7.2",
+        "chart.js": "^2.9.4",
         "cordova-android": "^6.1.2",
         "cordova-android-play-services-gradle-release": "^2.0.0",
         "cordova-android-support-gradle-release": "^2.0.1",
